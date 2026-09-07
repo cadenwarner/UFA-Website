@@ -3041,6 +3041,15 @@ footer { padding-bottom: 32px; }
   border-radius: 50%; background: var(--green-mid);
   box-shadow: 0 0 0 3px rgba(46,74,46,0.14);
 }
+.iv-open-note--closed {
+  color: #6b6b6b;
+  background: rgba(60,60,60,0.06);
+  border-color: rgba(60,60,60,0.18);
+}
+.iv-open-note--closed::before {
+  background: #9a9a9a;
+  box-shadow: 0 0 0 3px rgba(60,60,60,0.1);
+}
 
 .iv-media-cover { display: flex; justify-content: center; align-items: center; }
 .iv-cover-link { display: inline-block; position: relative; text-decoration: none; transition: transform .25s ease; }
@@ -3950,11 +3959,11 @@ button[onclick="pubFlipbookNext()"]:hover {
       <div class="two-col tab-two-col" style="margin-bottom:28px;">
         <div>
           <div class="section-tag">No experience required · one round of applications</div>
-           <div class="iv-open-note">Applications open now</div>
+           <div class="iv-open-note iv-open-note--closed">Applications closed — reopening spring 2026</div>
           <h2 class="section-title">Analyst Program</h2>
           <p style="font-size:16px;color:var(--text-mid);line-height:1.8;margin-bottom:20px;">The Analyst Program is designed for underclassmen and new members with no prior finance experience. In addition to the General Member meeting, analysts meet weekly for dedicated training sessions to build the skills needed to succeed in UFA and beyond.</p>
           <p style="font-size:16px;color:var(--text-mid);line-height:1.8;margin-bottom:32px;">Each week, our Directors of Investments and Consulting lead sessions covering accounting, valuation, financial modeling, and market analysis: everything you need to hit the ground running in UFA and in recruiting.</p>
-          <div class="team-btn-group"><a href="https://forms.gle/1DUi5se6x87MSEji8" target="_blank" rel="noopener noreferrer" class="btn-primary reveal" style="text-align:center;">Apply to Analyst Program</a></div>
+          <div class="team-btn-group"><span class="btn-primary reveal" style="text-align:center;opacity:0.55;cursor:default;pointer-events:none;">Applications closed — reopening spring 2026</span></div>
         </div>
          <div class="team-photo-tall analyst-comp-photo" style="border-radius:12px; overflow:hidden; height:400px;">
   <img loading="lazy" src="https://pub-6f59cfb453df44c4b5c1a8373848d609.r2.dev/imgur%20photos/3O0joVw.jpeg" 
@@ -4050,12 +4059,12 @@ button[onclick="pubFlipbookNext()"]:hover {
       <div class="two-col tab-two-col" style="margin-bottom:28px;">
         <div>
           <div class="section-tag">Experience required · application + interview</div>
-          <div class="iv-open-note">Applications open now</div>
+          <div class="iv-open-note iv-open-note--closed">Applications closed — reopening spring 2026</div>
           <h2 class="section-title">Investment Team</h2>
           <p style="font-size:16px;color:var(--text-mid);line-height:1.8;margin-bottom:16px;">The Investment Team is where serious finance preparation meets a tight-knit community. You'll build the technical skills recruiters want and the relationships that last long after graduation.</p>
           <p style="font-size:16px;color:var(--text-mid);line-height:1.8;margin-bottom:32px;">The technical training is rigorous. But ask any Investment Team member what they remember most, and they'll tell you it's the people.</p>
           <div class="team-btn-group" style="display:flex;gap:12px;flex-wrap:wrap;">
-          <a href="https://forms.gle/yfxsPRAuQdX2CteSA" target="_blank" rel="noopener noreferrer" class="btn-primary reveal" style="text-align:center;">Apply to Investment Team</a>
+          <span class="btn-primary reveal" style="text-align:center;opacity:0.55;cursor:default;pointer-events:none;">Applications closed — reopening spring 2026</span>
           <a href="/contact" onclick="showPage('contact');return false;" class="btn-outline work-with-us-btn" style="color:var(--green-dark);border-color:var(--green-accent);text-align:center;">Work with us</a>
           </div>
         </div>
@@ -4160,7 +4169,7 @@ button[onclick="pubFlipbookNext()"]:hover {
       <div class="two-col tab-two-col" style="margin-bottom:28px;">
         <div>
           <div class="section-tag">Experience required · application + interview</div>
-          <div class="iv-open-note">Applications open now</div>
+          <div class="iv-open-note iv-open-note--closed">Applications closed — reopening spring 2026</div>
       <h2 class="section-title">Consulting Team</h2>
       <p style="font-size:16px;color:var(--text-mid);line-height:1.8;margin-bottom:16px;">
         UFA's Consulting Team members tackle real business problems, build client-ready deliverables, and develop the structured thinking that top firms look for.
@@ -4169,7 +4178,7 @@ button[onclick="pubFlipbookNext()"]:hover {
         Outside the casework, you'll find a group that loves to spend time together.
       </p>
       <div class="team-btn-group" style="display:flex;gap:12px;flex-wrap:wrap;">
-        <a href="https://forms.gle/kXm4KZMKZagMknRF7" target="_blank" rel="noopener noreferrer" class="btn-primary reveal" style="text-align:center;">Apply to Consulting Team</a>
+        <span class="btn-primary reveal" style="text-align:center;opacity:0.55;cursor:default;pointer-events:none;">Applications closed — reopening spring 2026</span>
         <a href="/contact" onclick="showPage('contact');return false;" class="btn-outline work-with-us-btn" style="color:var(--green-dark);border-color:var(--green-accent);text-align:center;">Work with us</a>
       </div>
     </div>
@@ -4259,23 +4268,23 @@ button[onclick="pubFlipbookNext()"]:hover {
         </div>
       </div>
       <div class="membership-card">
-        <div class="membership-badge open">Applications open</div>
+        <div class="membership-badge closed">Reopens spring 2026</div>
         <div class="membership-title">Analyst</div>
         <p class="membership-desc">An introductory program covering finance fundamentals, stock pitches, and market discussions. Welcoming of all UT students with no experience required. Applications open each fall and spring semester.</p>
         <div class="membership-price">$30 / semester (in addition to GM)</div>
-        <a href="https://forms.gle/1DUi5se6x87MSEji8" target="_blank" rel="noopener noreferrer" class="btn-primary" style="background:var(--green-mid);">View application form</a>
+        <span class="btn-primary" style="background:#999;opacity:0.7;cursor:default;pointer-events:none;">Applications closed</span>
       </div>
       <div class="membership-card">
-        <div class="membership-badge open">Applications open</div>
+        <div class="membership-badge closed">Reopens spring 2026</div>
         <div class="membership-title">Investment Team</div>
         <p class="membership-desc">A selective, application-based track with deep technical training, one-on-one mentorship, and strong recruiting outcomes. Applications open each fall and spring semester.</p>
-        <a href="https://forms.gle/yfxsPRAuQdX2CteSA" target="_blank" rel="noopener noreferrer" class="btn-primary" style="background:var(--green-mid);">View application form</a>
+        <span class="btn-primary" style="background:#999;opacity:0.7;cursor:default;pointer-events:none;">Applications closed</span>
       </div>
        <div class="membership-card">
-        <div class="membership-badge open">Applications open</div>
+        <div class="membership-badge closed">Reopens spring 2026</div>
         <div class="membership-title">Consulting Team</div>
         <p class="membership-desc">A selective, application-based track focused on real client engagements, case-study training, and developing the structured thinking top firms look for. Applications open each fall and spring semester.</p>
-        <a href="https://forms.gle/kXm4KZMKZagMknRF7" target="_blank" rel="noopener noreferrer" class="btn-primary" style="background:var(--green-mid);">View application form</a>
+        <span class="btn-primary" style="background:#999;opacity:0.7;cursor:default;pointer-events:none;">Applications closed</span>
       </div>
     </div>
   </section>
@@ -5401,7 +5410,6 @@ button[onclick="pubFlipbookNext()"]:hover {
           </div>
           <div class="admin-tab-nav" id="recruit-tab-nav">
             <button onclick="switchRecruitTab('resources')" class="admin-tab active" id="rtab-resources">Resources</button>
-            <button onclick="switchRecruitTab('timeline')" class="admin-tab" id="rtab-timeline">Timeline</button>
             <button onclick="switchRecruitTab('internships')" class="admin-tab" id="rtab-internships">Internships</button>
             <button onclick="switchRecruitTab('resume')" class="admin-tab" id="rtab-resume">Resume Book</button>
             <button onclick="switchRecruitTab('mock')" class="admin-tab" id="rtab-mock">Mock Interview</button>
@@ -5620,102 +5628,6 @@ button[onclick="pubFlipbookNext()"]:hover {
           <div class="ufa-card" id="mock-stats-card" style="display:none;">
             <div class="ufa-label">Your practice history</div>
             <div id="mock-stats"></div>
-          </div>
-        </div>
-
-        <!-- ── RECRUITING TIMELINE ──
-             Visible to every member. Board add/delete controls appear
-             inline for board accounts. -->
-        <div id="ptab-content-timeline" style="display:none;">
-          <div class="ufa-pane-head">
-            <div class="ufa-pane-title">Recruiting Timeline</div>
-            <div class="ufa-pane-sub">When applications open and close. Sophomore banking recruiting starts earlier than anyone expects &mdash; check this before you assume you have time.</div>
-          </div>
-
-          <div id="timeline-visibility"></div>
-          <div id="timeline-alert" style="display:none;"></div>
-
-          <!-- Board-only: pending member submissions -->
-          <div id="timeline-queue" style="display:none;"></div>
-
-          <div class="ufa-card ufa-card-tight">
-            <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-              <select id="tl-filter-cat" class="ufa-select" style="max-width:200px;" onchange="renderTimeline()">
-                <option value="">All categories</option>
-                <option>Investment Banking</option>
-                <option>Consulting</option>
-                <option>Private Equity</option>
-                <option>Hedge Fund</option>
-                <option>Asset Management</option>
-                <option>Other</option>
-              </select>
-              <select id="tl-filter-year" class="ufa-select" style="max-width:180px;" onchange="renderTimeline()">
-                <option value="">All years</option>
-                <option>Freshman</option>
-                <option>Sophomore</option>
-                <option>Junior</option>
-                <option>Senior</option>
-              </select>
-              <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:#3A4A3A;cursor:pointer;">
-                <input type="checkbox" id="tl-hide-past" checked style="width:15px;height:15px;cursor:pointer;" onchange="renderTimeline()">
-                Hide closed
-              </label>
-            </div>
-          </div>
-
-          <div id="timeline-list"></div>
-
-          <!-- Anyone can suggest a deadline they found -->
-          <div class="ufa-card">
-            <div class="ufa-label">Found a deadline we are missing?</div>
-            <div class="ufa-pane-sub" style="margin-bottom:14px;">
-              Add it here and a board member will review it. The people applying are the
-              ones who find these first, so this is how the list stays current.
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;" id="ts-grid">
-              <div><div class="ufa-label">Firm</div><input id="ts-firm" class="ufa-input" placeholder="Evercore"></div>
-              <div><div class="ufa-label">Program</div><input id="ts-program" class="ufa-input" placeholder="Summer Analyst 2028"></div>
-              <div><div class="ufa-label">Category</div>
-                <select id="ts-category" class="ufa-select">
-                  <option>Investment Banking</option><option>Consulting</option>
-                  <option>Private Equity</option><option>Hedge Fund</option>
-                  <option>Asset Management</option><option>Other</option>
-                </select>
-              </div>
-              <div><div class="ufa-label">Deadline</div><input type="date" id="ts-deadline" class="ufa-input"></div>
-              <div><div class="ufa-label">Link</div><input type="url" id="ts-url" class="ufa-input" placeholder="https://…"></div>
-              <div><div class="ufa-label">Anything else</div><input id="ts-notes" class="ufa-input" placeholder="Optional"></div>
-            </div>
-            <div style="margin-top:16px;"><button class="ufa-btn" onclick="submitTimelineSuggestion()">Submit for review</button></div>
-          </div>
-
-          <!-- Board only -->
-          <div id="timeline-admin" style="display:none;">
-            <div class="ufa-card">
-              <div class="ufa-label">Add a deadline</div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;" id="tl-grid">
-                <div><div class="ufa-label">Firm</div><input id="tl-firm" class="ufa-input" placeholder="Evercore"></div>
-                <div><div class="ufa-label">Program</div><input id="tl-program" class="ufa-input" placeholder="Summer Analyst 2028"></div>
-                <div><div class="ufa-label">Category</div>
-                  <select id="tl-category" class="ufa-select">
-                    <option>Investment Banking</option><option>Consulting</option>
-                    <option>Private Equity</option><option>Hedge Fund</option>
-                    <option>Asset Management</option><option>Other</option>
-                  </select>
-                </div>
-                <div><div class="ufa-label">Who it is for</div>
-                  <select id="tl-year" class="ufa-select">
-                    <option value="">Anyone</option><option>Freshman</option>
-                    <option>Sophomore</option><option>Junior</option><option>Senior</option>
-                  </select>
-                </div>
-                <div><div class="ufa-label">Opens</div><input type="date" id="tl-opens" class="ufa-input"></div>
-                <div><div class="ufa-label">Deadline</div><input type="date" id="tl-deadline" class="ufa-input"></div>
-                <div><div class="ufa-label">Application link</div><input type="url" id="tl-url" class="ufa-input" placeholder="https://…"></div>
-                <div><div class="ufa-label">Notes</div><input id="tl-notes" class="ufa-input" placeholder="Requires a cover letter"></div>
-              </div>
-              <div style="margin-top:16px;"><button class="ufa-btn" onclick="addTimelineRow()">Add to timeline</button></div>
-            </div>
           </div>
         </div>
 
@@ -6283,6 +6195,7 @@ button[onclick="pubFlipbookNext()"]:hover {
 
               <div class="ufa-sec-nav" id="iv-view-nav">
                 <button class="ufa-sec-btn is-active" id="ivv-candidates" onclick="switchIvView('candidates')">Candidates</button>
+                <button class="ufa-sec-btn" id="ivv-coverage" onclick="switchIvView('coverage')">Coverage</button>
                 <button class="ufa-sec-btn" id="ivv-run" onclick="switchIvView('run')">Run Interview</button>
                 <button class="ufa-sec-btn" id="ivv-rank" onclick="switchIvView('rank')">Rankings</button>
                 <button class="ufa-sec-btn" id="ivv-bank" onclick="switchIvView('bank')">Question Bank</button>
@@ -6320,6 +6233,34 @@ button[onclick="pubFlipbookNext()"]:hover {
                   </div>
                   <div class="ufa-table-wrap">
                     <table class="ufa-table" id="iv-cand-table"></table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- COVERAGE ──
+                   Who hasn't been interviewed yet. With forty candidates
+                   and six interviewers this is the difference between a
+                   real answer and scanning the whole list by eye at 9pm
+                   the night before decisions. -->
+              <div id="ivview-coverage" style="display:none;">
+                <div class="ufa-card ufa-card-tight">
+                  <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;">
+                    <select id="iv-cov-team" class="ufa-select" style="max-width:170px;" onchange="renderCoverage()">
+                      <option value="">All teams</option>
+                      <option value="Investment">Investment</option>
+                      <option value="Consulting">Consulting</option>
+                    </select>
+                    <select id="iv-cov-year" class="ufa-select" style="max-width:160px;" onchange="renderCoverage()">
+                      <option value="">All years</option>
+                      <option value="Freshman">Freshman</option>
+                      <option value="Sophomore">Sophomore</option>
+                      <option value="Junior">Junior</option>
+                      <option value="Senior">Senior</option>
+                    </select>
+                    <div class="ufa-pane-sub" style="margin-left:auto;" id="iv-cov-summary"></div>
+                  </div>
+                  <div class="ufa-table-wrap">
+                    <table class="ufa-table" id="iv-cov-table"></table>
                   </div>
                 </div>
               </div>
@@ -9461,7 +9402,6 @@ var recruitGrouped = false;
 var recruitTab = 'resources';
 
 const RECRUIT_PANES = {
-  timeline:    'ptab-content-timeline',
   resources:   'ptab-content-resources',
   internships: 'ptab-content-internships',
   resume:      'ptab-content-resume',
@@ -9493,7 +9433,6 @@ function switchRecruitTab(tab) {
   if (tab === 'resources')   loadResources();
   if (tab === 'resume')      loadResumeTab();
   if (tab === 'mock')        loadMockTab();
-  if (tab === 'timeline')    loadTimeline();
   if (tab === 'alumni')      loadAlumni();
   if (tab === 'pitches')     loadPitches();
 }
@@ -9504,7 +9443,6 @@ function switchRecruitTab(tab) {
  * tab that returns nothing for members is just confusing.
  */
 const GATED_RECRUIT_TABS = [
-  ['timeline','visibility_timeline'],
   ['resume',  'visibility_resume'],
   ['mock',    'visibility_mock'],
   ['alumni',  'visibility_alumni'],
@@ -11287,17 +11225,19 @@ async function refreshInterviewData() {
   var su = document.getElementById('iv-sheet-url'); if (su) su.value = IV.sheetCfg.url || '';
   renderTimerConfig();
   renderCandidates();
+  ivUpdateCoverageBadge();
 }
 
 function switchIvView(v) {
   IV.view = v;
-  ['candidates', 'run', 'rank', 'bank', 'setup'].forEach(function (x) {
+  ['candidates', 'coverage', 'run', 'rank', 'bank', 'setup'].forEach(function (x) {
     var btn = document.getElementById('ivv-' + x);
     var pane = document.getElementById('ivview-' + x);
     if (btn) btn.classList.toggle('is-active', x === v);
     if (pane) pane.style.display = (x === v) ? '' : 'none';
   });
   if (v === 'candidates') renderCandidates();
+  if (v === 'coverage') renderCoverage();
   if (v === 'rank') renderRankings();
   if (v === 'bank') renderBank();
   if (v === 'run') renderRunView();
@@ -11351,11 +11291,75 @@ function renderCandidates() {
       '<td>' + st.count + '</td>' +
       '<td>' + (st.avg != null ? st.avg.toFixed(1) : '—') + '</td>' +
       '<td><span class="ufa-pill ufa-pill-' + pill + '">' + label + '</span></td>' +
+      '<td style="text-align:right;white-space:nowrap;" onclick="event.stopPropagation()">' +
+        '<button class="ufa-btn-ghost ufa-btn-sm" onclick="openEditCandidate(\'' + c.id + '\')">Edit</button> ' +
+        '<button class="ufa-btn ufa-btn-sm" onclick="beginInterview(\'' + c.id + '\')">Interview</button></td>' +
+    '</tr>';
+  });
+  tbl.innerHTML = html + '</tbody>';
+}
+
+/**
+ * "Not yet interviewed" means zero completed sessions — someone who has
+ * a session in progress but never finished it still counts as not covered,
+ * since nothing scoreable exists for them yet.
+ */
+function ivIsUncovered(candId) {
+  return !IV.sessions.some(function (s) { return s.candidate_id === candId && s.status === 'complete'; });
+}
+
+function renderCoverage() {
+  var tbl = document.getElementById('iv-cov-table');
+  if (!tbl) return;
+  var team = (document.getElementById('iv-cov-team') || {}).value || '';
+  var year = (document.getElementById('iv-cov-year') || {}).value || '';
+
+  var all = IV.candidates.filter(function (c) {
+    if (team && c.team !== team) return false;
+    if (year && c.year !== year) return false;
+    return true;
+  });
+  var rows = all.filter(function (c) { return ivIsUncovered(c.id); });
+
+  var summary = document.getElementById('iv-cov-summary');
+  if (summary) {
+    summary.textContent = all.length
+      ? (rows.length + ' of ' + all.length + ' not yet interviewed')
+      : '';
+  }
+  ivUpdateCoverageBadge();
+
+  if (!all.length) {
+    tbl.innerHTML = '<tr><td><div class="ufa-empty">No candidates yet for ' + ufaEsc(IV.cycle) + '.</div></td></tr>';
+    return;
+  }
+  if (!rows.length) {
+    tbl.innerHTML = '<tr><td><div class="ufa-empty">Everyone in this filter has at least one completed interview.</div></td></tr>';
+    return;
+  }
+
+  var html = '<thead><tr><th>Candidate</th><th>Year</th><th>Team</th><th>In progress</th><th></th></tr></thead><tbody>';
+  rows.forEach(function (c) {
+    var inProgress = IV.sessions.some(function (s) { return s.candidate_id === c.id && s.status !== 'complete'; });
+    html += '<tr class="ufa-cand-row" onclick="openCandidate(\'' + c.id + '\')">' +
+      '<td><div style="font-weight:600;color:#1C2B1C;">' + ufaEsc(c.name) + '</div>' +
+        (c.email ? '<div style="font-size:12px;color:#6B7D6B;">' + ufaEsc(c.email) + '</div>' : '') + '</td>' +
+      '<td>' + ufaEsc(c.year || '—') + '</td>' +
+      '<td>' + ufaEsc(c.team || '—') + '</td>' +
+      '<td>' + (inProgress ? '<span class="ufa-pill ufa-pill-amber">started, unfinished</span>' : '—') + '</td>' +
       '<td style="text-align:right;" onclick="event.stopPropagation()">' +
         '<button class="ufa-btn ufa-btn-sm" onclick="beginInterview(\'' + c.id + '\')">Interview</button></td>' +
     '</tr>';
   });
   tbl.innerHTML = html + '</tbody>';
+}
+
+/** Small red count on the Coverage tab itself, visible from any view. */
+function ivUpdateCoverageBadge() {
+  var btn = document.getElementById('ivv-coverage');
+  if (!btn) return;
+  var n = IV.candidates.filter(function (c) { return ivIsUncovered(c.id); }).length;
+  btn.textContent = 'Coverage' + (n ? ' (' + n + ')' : '');
 }
 
 function openAddCandidate() {
@@ -11396,6 +11400,57 @@ async function addCandidate() {
   ufaCloseModal();
   await refreshInterviewData();
   ufaAlert('iv-alert', 'ok', 'Added ' + name + '.');
+}
+
+/**
+ * A misspelled name or wrong team assigned at import shouldn't require
+ * deleting and re-adding the candidate — everything downstream (sessions,
+ * scores, chat) is keyed off their id, so an edit-in-place is what keeps
+ * that history intact.
+ */
+function openEditCandidate(id) {
+  var c = IV.candidates.filter(function (x) { return x.id === id; })[0];
+  if (!c) return;
+  ufaModal(
+    '<div class="ufa-modal-head"><div class="ufa-modal-title">Edit candidate</div>' +
+      '<button class="ufa-modal-x" onclick="ufaCloseModal()">&times;</button></div>' +
+    '<div class="ufa-modal-body">' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">' +
+        '<div><div class="ufa-label">Name</div><input id="ec-name" class="ufa-input" value="' + ufaEsc(c.name || '') + '"></div>' +
+        '<div><div class="ufa-label">Email</div><input id="ec-email" class="ufa-input" type="email" value="' + ufaEsc(c.email || '') + '"></div>' +
+        '<div><div class="ufa-label">Year</div><select id="ec-year" class="ufa-select">' +
+          ['Freshman', 'Sophomore', 'Junior', 'Senior'].map(function (y) {
+            return '<option' + (c.year === y ? ' selected' : '') + '>' + y + '</option>';
+          }).join('') + '</select></div>' +
+        '<div><div class="ufa-label">Team</div><select id="ec-team" class="ufa-select">' +
+          ['Investment', 'Consulting'].map(function (t) {
+            return '<option' + (c.team === t ? ' selected' : '') + '>' + t + '</option>';
+          }).join('') + '</select></div>' +
+        '<div><div class="ufa-label">Major</div><input id="ec-major" class="ufa-input" value="' + ufaEsc(c.major || '') + '"></div>' +
+      '</div>' +
+      '<div id="ec-alert" style="margin-top:14px;"></div>' +
+    '</div>' +
+    '<div class="ufa-modal-foot">' +
+      '<button class="ufa-btn-ghost" onclick="ufaCloseModal()">Cancel</button>' +
+      '<button class="ufa-btn" onclick="saveEditCandidate(\'' + id + '\')">Save</button>' +
+    '</div>'
+  );
+}
+
+async function saveEditCandidate(id) {
+  var name = (document.getElementById('ec-name').value || '').trim();
+  if (!name) { ufaAlert('ec-alert', 'err', 'A name is required.'); return; }
+  var res = await sb.from('candidates').update({
+    name: name,
+    email: (document.getElementById('ec-email').value || '').trim().toLowerCase() || null,
+    year: document.getElementById('ec-year').value,
+    team: document.getElementById('ec-team').value,
+    major: (document.getElementById('ec-major').value || '').trim() || null
+  }).eq('id', id);
+  if (res.error) { ufaAlert('ec-alert', 'err', 'Could not save: ' + res.error.message); return; }
+  ufaCloseModal();
+  await refreshInterviewData();
+  ufaAlert('iv-alert', 'ok', 'Updated ' + name + '.');
 }
 
 /* ── Candidate detail: every interview, every score, the chat ────── */
@@ -11439,6 +11494,10 @@ async function openCandidate(id) {
         body += '<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(46,74,46,0.08);font-size:13px;color:#4A5A4A;line-height:1.6;white-space:pre-wrap;">' +
           ufaEsc(s.summary) + '</div>';
       }
+      if (s.status === 'complete') {
+        body += '<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(46,74,46,0.08);text-align:right;">' +
+          '<button class="ufa-btn-ghost ufa-btn-sm" onclick="editSession(\'' + s.id + '\')">Edit this interview</button></div>';
+      }
       body += '</div>';
     });
   }
@@ -11472,6 +11531,7 @@ async function openCandidate(id) {
       '</div>' +
     '</div>' +
     '<div class="ufa-modal-foot">' +
+      '<button class="ufa-btn-ghost" onclick="closeCandidateModal();openEditCandidate(\'' + c.id + '\')">Edit candidate</button>' +
       '<button class="ufa-btn-ghost" onclick="window.print()">Print scorecard</button>' +
       '<button class="ufa-btn-ghost" onclick="closeCandidateModal()">Close</button>' +
       '<button class="ufa-btn" onclick="closeCandidateModal();beginInterview(\'' + c.id + '\')">Start an interview</button>' +
@@ -11929,6 +11989,124 @@ async function saveInterview() {
   } catch (e) {
     ufaAlert('iv-finish-alert', 'err', 'Could not save: ' + (e.message || 'unknown error'));
     if (btn) { btn.disabled = false; btn.textContent = 'Save interview'; }
+  }
+}
+
+/**
+ * A finished interview isn't final in the way it currently acts — someone
+ * hits Finish early, or wants to add a note the next morning, and there was
+ * no way back in. This edits a completed session directly (scores,
+ * per-section notes, recommendation, summary) without re-running the live
+ * timer, since the interview itself already happened.
+ */
+var ivEditSessionId = null;
+var ivEditScores = {};
+var ivEditRec = null;
+
+function editSession(sessionId) {
+  var s = IV.sessions.filter(function (x) { return x.id === sessionId; })[0];
+  if (!s) return;
+  var c = IV.candidates.filter(function (x) { return x.id === s.candidate_id; })[0];
+  var secs = IV.scores.filter(function (x) { return x.session_id === sessionId; });
+
+  ivEditSessionId = sessionId;
+  ivEditRec = s.recommendation || null;
+  ivEditScores = {};
+  IV_SECTIONS.forEach(function (sec) {
+    var sc = secs.filter(function (x) { return x.section === sec.id; })[0];
+    ivEditScores[sec.id] = { score: sc ? sc.score : null, notes: sc ? (sc.notes || '') : '' };
+  });
+
+  ufaModal(
+    '<div class="ufa-modal-head"><div class="ufa-modal-title">Edit interview — ' + ufaEsc(c ? c.name : '') + '</div>' +
+      '<button class="ufa-modal-x" onclick="ufaCloseModal()">&times;</button></div>' +
+    '<div class="ufa-modal-body">' +
+      '<div class="ufa-note" style="margin-bottom:16px;">Interviewed by ' + ufaEsc(s.interviewer_name || s.interviewer_email) +
+        ' on ' + ufaDateTime(s.started_at) + '.</div>' +
+      IV_SECTIONS.map(function (sec) {
+        var cur = ivEditScores[sec.id];
+        return '<div class="ufa-card ufa-card-tight" style="margin-bottom:12px;">' +
+          '<div class="ufa-label">' + ufaEsc(sec.label) + '</div>' +
+          '<div class="ufa-score-row" id="ivedit-score-' + sec.id + '">' +
+            [1, 2, 3, 4, 5].map(function (n) {
+              return '<button class="ufa-score-btn' + (cur.score === n ? ' is-active' : '') +
+                '" onclick="ivEditSetScore(\'' + sec.id + '\',' + n + ')">' + n + '</button>';
+            }).join('') +
+          '</div>' +
+          '<textarea id="ivedit-notes-' + sec.id + '" class="ufa-textarea" style="margin-top:10px;" placeholder="Notes" ' +
+            'oninput="ivEditScores[\'' + sec.id + '\'].notes=this.value">' + ufaEsc(cur.notes) + '</textarea>' +
+        '</div>';
+      }).join('') +
+      '<div class="ufa-label">Recommendation</div>' +
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;" id="ivedit-rec-row">' +
+        ['advance', 'discuss', 'reject'].map(function (d) {
+          return '<button class="ufa-sec-btn' + (ivEditRec === d ? ' is-active' : '') + '" data-rec="' + d + '" onclick="ivEditPickRec(\'' + d + '\')">' +
+            d.charAt(0).toUpperCase() + d.slice(1) + '</button>';
+        }).join('') +
+      '</div>' +
+      '<div class="ufa-label">Overall comment</div>' +
+      '<textarea id="ivedit-summary" class="ufa-textarea">' + ufaEsc(s.summary || '') + '</textarea>' +
+      '<div id="ivedit-alert" style="margin-top:14px;"></div>' +
+    '</div>' +
+    '<div class="ufa-modal-foot">' +
+      '<button class="ufa-btn-ghost" onclick="ufaCloseModal()">Cancel</button>' +
+      '<button class="ufa-btn" id="ivedit-save-btn" onclick="saveSessionEdit()">Save changes</button>' +
+    '</div>'
+  );
+}
+
+function ivEditSetScore(sectionId, n) {
+  ivEditScores[sectionId].score = (ivEditScores[sectionId].score === n) ? null : n;
+  var row = document.getElementById('ivedit-score-' + sectionId);
+  if (row) {
+    Array.prototype.forEach.call(row.querySelectorAll('.ufa-score-btn'), function (b, i) {
+      b.classList.toggle('is-active', ivEditScores[sectionId].score === i + 1);
+    });
+  }
+}
+
+function ivEditPickRec(d) {
+  ivEditRec = d;
+  Array.prototype.forEach.call(document.querySelectorAll('#ivedit-rec-row .ufa-sec-btn'), function (b) {
+    b.classList.toggle('is-active', b.dataset.rec === d);
+  });
+}
+
+async function saveSessionEdit() {
+  var btn = document.getElementById('ivedit-save-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Saving…'; }
+  try {
+    var scored = IV_SECTIONS.map(function (sec) { return ivEditScores[sec.id].score; }).filter(function (v) { return v != null; });
+    var avg = scored.length ? scored.reduce(function (a, b) { return a + b; }, 0) / scored.length : null;
+
+    var up = await sb.from('interview_sessions').update({
+      overall_score: avg,
+      recommendation: ivEditRec,
+      summary: (document.getElementById('ivedit-summary').value || '').trim()
+    }).eq('id', ivEditSessionId);
+    if (up.error) throw up.error;
+
+    for (var i = 0; i < IV_SECTIONS.length; i++) {
+      var sec = IV_SECTIONS[i];
+      var cur = ivEditScores[sec.id];
+      if (cur.score == null && !cur.notes) continue;
+      var r = await sb.from('interview_scores').upsert({
+        session_id: ivEditSessionId,
+        candidate_id: (IV.sessions.filter(function (x) { return x.id === ivEditSessionId; })[0] || {}).candidate_id,
+        section: sec.id,
+        score: cur.score,
+        notes: cur.notes || null,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'session_id,section' });
+      if (r.error) throw r.error;
+    }
+
+    ufaCloseModal();
+    await refreshInterviewData();
+    ufaAlert('iv-alert', 'ok', 'Interview updated.');
+  } catch (e) {
+    ufaAlert('ivedit-alert', 'err', 'Could not save: ' + (e.message || 'unknown error'));
+    if (btn) { btn.disabled = false; btn.textContent = 'Save changes'; }
   }
 }
 
@@ -12592,7 +12770,7 @@ function renderMockStats() {
 
 /* ══════════════════════════════════════════════════════════════════════
    PORTAL v2 — PART C
-   Recruiting Timeline · Alumni Directory · Stock Pitch Archive
+   Alumni Directory · Stock Pitch Archive
 
    All three follow the same pattern: one pane that members read, with the
    board's add and edit controls appearing inline for board accounts. That
@@ -12605,193 +12783,6 @@ function renderMockStats() {
    than merely unlinked.
    ══════════════════════════════════════════════════════════════════════ */
 
-/* ══════════════════════════════════════════════════════════════════
-   1. RECRUITING TIMELINE
-   ══════════════════════════════════════════════════════════════════ */
-
-var timelineRows = [];
-
-const TL_CATEGORIES = ['Investment Banking', 'Consulting', 'Private Equity',
-                       'Hedge Fund', 'Asset Management', 'Other'];
-
-async function loadTimeline() {
-  var box = document.getElementById('timeline-list');
-  if (box) box.innerHTML = '<div class="ufa-empty">Loading…</div>';
-  var r = await sb.from('recruiting_timeline').select('*').order('deadline', { ascending: true });
-  timelineRows = r.data || [];
-  var admin = document.getElementById('timeline-admin');
-  if (admin) admin.style.display = ufaIsBoard() ? '' : 'none';
-  if (ufaIsBoard()) {
-    await renderVisibilityToggle('timeline', 'visibility_timeline');
-    await loadTimelineQueue();
-  }
-  renderTimeline();
-}
-
-/* ── Member submissions ──────────────────────────────────────────── */
-
-async function submitTimelineSuggestion() {
-  var firm = (document.getElementById('ts-firm').value || '').trim();
-  if (!firm) { ufaAlert('timeline-alert', 'err', 'Which firm?'); return; }
-  var res = await sb.from('timeline_submissions').insert({
-    firm: firm,
-    program: (document.getElementById('ts-program').value || '').trim() || null,
-    category: document.getElementById('ts-category').value,
-    deadline: document.getElementById('ts-deadline').value || null,
-    url: (document.getElementById('ts-url').value || '').trim() || null,
-    notes: (document.getElementById('ts-notes').value || '').trim() || null,
-    submitted_by: ufaEmail(),
-    submitted_name: (currentMember && currentMember.name) || ''
-  });
-  if (res.error) { ufaAlert('timeline-alert', 'err', 'Could not submit: ' + res.error.message); return; }
-  ['ts-firm', 'ts-program', 'ts-url', 'ts-notes', 'ts-deadline'].forEach(function (id) {
-    var el = document.getElementById(id); if (el) el.value = '';
-  });
-  ufaAlert('timeline-alert', 'ok', 'Thanks — sent to the board for review.');
-  if (ufaIsBoard()) await loadTimelineQueue();
-}
-
-/** Board view of everything waiting for approval. */
-async function loadTimelineQueue() {
-  var box = document.getElementById('timeline-queue');
-  if (!box) return;
-  var r = await sb.from('timeline_submissions').select('*')
-    .eq('status', 'pending').order('created_at', { ascending: true });
-  var rows = r.data || [];
-  if (!rows.length) { box.style.display = 'none'; return; }
-
-  box.style.display = '';
-  box.innerHTML = '<div class="ufa-card" style="border-color:#E4C98A;">' +
-    '<div class="ufa-label">Member submissions waiting — ' + rows.length + '</div>' +
-    rows.map(function (t) {
-      return '<div class="ufa-booking-row">' +
-        '<div style="flex:1;min-width:200px;">' +
-          '<div style="font-size:14px;font-weight:600;color:#1C2B1C;">' + ufaEsc(t.firm) +
-            (t.program ? ' <span style="font-weight:400;color:#6B7D6B;">— ' + ufaEsc(t.program) + '</span>' : '') + '</div>' +
-          '<div style="font-size:12px;color:#6B7D6B;margin-top:3px;">' +
-            ufaEsc([t.category, t.deadline ? 'due ' + ufaDate(t.deadline) : 'no date'].filter(Boolean).join(' · ')) +
-            ' · from ' + ufaEsc(t.submitted_name || t.submitted_by) + '</div>' +
-          (t.url ? '<a href="' + ufaEsc(t.url) + '" target="_blank" rel="noopener" style="font-size:12px;color:#3D6B3D;">Check the link</a>' : '') +
-        '</div>' +
-        '<button class="ufa-btn ufa-btn-sm" onclick="approveTimelineSubmission(\'' + t.id + '\')">Add it</button>' +
-        '<button class="ufa-btn-ghost ufa-btn-sm ufa-btn-danger" onclick="rejectTimelineSubmission(\'' + t.id + '\')">Discard</button>' +
-      '</div>';
-    }).join('') +
-  '</div>';
-}
-
-async function approveTimelineSubmission(id) {
-  var r = await sb.from('timeline_submissions').select('*').eq('id', id).maybeSingle();
-  if (!r.data) return;
-  var t = r.data;
-  var ins = await sb.from('recruiting_timeline').insert({
-    firm: t.firm, program: t.program, category: t.category || 'Other',
-    target_year: t.target_year, opens_on: t.opens_on, deadline: t.deadline,
-    url: t.url, notes: t.notes
-  });
-  if (ins.error) { ufaAlert('timeline-alert', 'err', 'Could not add: ' + ins.error.message); return; }
-  await sb.from('timeline_submissions').update({ status: 'approved' }).eq('id', id);
-  await loadTimeline();
-  ufaAlert('timeline-alert', 'ok', 'Added ' + t.firm + ' to the timeline.');
-}
-
-async function rejectTimelineSubmission(id) {
-  await sb.from('timeline_submissions').update({ status: 'rejected' }).eq('id', id);
-  await loadTimelineQueue();
-}
-
-function ufaDaysUntil(d) {
-  if (!d) return null;
-  var target = new Date(d + 'T23:59:59');
-  return Math.ceil((target - new Date()) / 86400000);
-}
-
-function renderTimeline() {
-  var box = document.getElementById('timeline-list');
-  if (!box) return;
-  var cat = (document.getElementById('tl-filter-cat') || {}).value || '';
-  var yr = (document.getElementById('tl-filter-year') || {}).value || '';
-  var hidePast = (document.getElementById('tl-hide-past') || {}).checked;
-
-  var rows = timelineRows.filter(function (t) {
-    if (cat && t.category !== cat) return false;
-    if (yr && t.target_year && t.target_year !== yr) return false;
-    if (hidePast && t.deadline && ufaDaysUntil(t.deadline) < 0) return false;
-    return true;
-  });
-
-  if (!rows.length) {
-    box.innerHTML = '<div class="ufa-empty">' +
-      (timelineRows.length
-        ? 'Nothing matches those filters.'
-        : 'No deadlines posted yet.' + (ufaIsBoard() ? ' Add the first one below.' : ' Check back soon.')) +
-      '</div>';
-    return;
-  }
-
-  box.innerHTML = rows.map(function (t) {
-    var days = ufaDaysUntil(t.deadline);
-    var urgency = 'grey', when = 'No deadline set';
-    if (days !== null) {
-      if (days < 0) { urgency = 'grey'; when = 'Closed'; }
-      else if (days === 0) { urgency = 'red'; when = 'Closes today'; }
-      else if (days <= 7) { urgency = 'red'; when = days + ' day' + (days === 1 ? '' : 's') + ' left'; }
-      else if (days <= 30) { urgency = 'amber'; when = days + ' days left'; }
-      else { urgency = 'green'; when = days + ' days left'; }
-    }
-    return '<div class="ufa-card ufa-card-tight" style="margin-bottom:12px;' +
-        (days !== null && days < 0 ? 'opacity:0.55;' : '') + '">' +
-      '<div style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:flex-start;">' +
-        '<div style="flex:1;min-width:200px;">' +
-          '<div style="font-size:15px;font-weight:600;color:#1C2B1C;">' + ufaEsc(t.firm) + '</div>' +
-          '<div style="font-size:13px;color:#3A4A3A;margin-top:2px;">' + ufaEsc(t.program || '') + '</div>' +
-          '<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;">' +
-            '<span class="ufa-pill ufa-pill-blue">' + ufaEsc(t.category) + '</span>' +
-            (t.target_year ? '<span class="ufa-pill ufa-pill-grey">' + ufaEsc(t.target_year) + '</span>' : '') +
-          '</div>' +
-          (t.notes ? '<div style="font-size:12px;color:#6B7D6B;margin-top:8px;line-height:1.6;">' + ufaEsc(t.notes) + '</div>' : '') +
-        '</div>' +
-        '<div style="text-align:right;min-width:140px;">' +
-          '<span class="ufa-pill ufa-pill-' + urgency + '">' + when + '</span>' +
-          (t.opens_on ? '<div style="font-size:12px;color:#6B7D6B;margin-top:8px;">Opens ' + ufaDate(t.opens_on) + '</div>' : '') +
-          (t.deadline ? '<div style="font-size:13px;color:#1C2B1C;font-weight:600;margin-top:2px;">Due ' + ufaDate(t.deadline) + '</div>' : '') +
-          '<div style="margin-top:10px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;">' +
-            (t.url ? '<a class="ufa-btn-ghost ufa-btn-sm" style="text-decoration:none;" target="_blank" rel="noopener" href="' + ufaEsc(t.url) + '">Apply</a>' : '') +
-            (ufaIsBoard() ? '<button class="ufa-btn-ghost ufa-btn-sm ufa-btn-danger" onclick="deleteTimelineRow(\'' + t.id + '\')">Delete</button>' : '') +
-          '</div>' +
-        '</div>' +
-      '</div>' +
-    '</div>';
-  }).join('');
-}
-
-async function addTimelineRow() {
-  var firm = (document.getElementById('tl-firm').value || '').trim();
-  if (!firm) { ufaAlert('timeline-alert', 'err', 'The firm name is required.'); return; }
-  var row = {
-    firm: firm,
-    program: (document.getElementById('tl-program').value || '').trim() || null,
-    category: document.getElementById('tl-category').value,
-    target_year: document.getElementById('tl-year').value || null,
-    opens_on: document.getElementById('tl-opens').value || null,
-    deadline: document.getElementById('tl-deadline').value || null,
-    url: (document.getElementById('tl-url').value || '').trim() || null,
-    notes: (document.getElementById('tl-notes').value || '').trim() || null
-  };
-  var res = await sb.from('recruiting_timeline').insert(row);
-  if (res.error) { ufaAlert('timeline-alert', 'err', 'Could not add: ' + res.error.message); return; }
-  ['tl-firm', 'tl-program', 'tl-url', 'tl-notes', 'tl-opens', 'tl-deadline'].forEach(function (id) {
-    var el = document.getElementById(id); if (el) el.value = '';
-  });
-  await loadTimeline();
-  ufaAlert('timeline-alert', 'ok', 'Added ' + firm + '.');
-}
-
-async function deleteTimelineRow(id) {
-  if (!window.confirm('Remove this deadline?')) return;
-  await sb.from('recruiting_timeline').delete().eq('id', id);
-  await loadTimeline();
-}
 
 
 /* ══════════════════════════════════════════════════════════════════
@@ -13092,8 +13083,7 @@ async function deletePitch(id) {
    be theatre. Saying so plainly beats implying protection that is not there. */
 const DB_ENFORCED_FEATURES = [
   'visibility_alumni', 'visibility_pitches',
-  'visibility_board_hours', 'visibility_resume',
-  'visibility_timeline'
+  'visibility_board_hours', 'visibility_resume'
 ];
 
 async function renderVisibilityToggle(uiKey, settingKey) {
@@ -13173,9 +13163,6 @@ async function toggleVisibility(uiKey, settingKey, turnOn) {
       <ul class="footer-links">
         <li><a href="https://utexas.campuslabs.com/engage/organization/texasufa" target="_blank" rel="noopener noreferrer">General Membership</a></li>
         <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSeGEtzK6gp8CCAIRzTwnvoZlNKANFII7CRJRO_sy9XNEUFbMQ/viewform" target="_blank" rel="noopener noreferrer">Interest Form</a></li>
-        <li><a href="https://forms.gle/1DUi5se6x87MSEji8" target="_blank" rel="noopener noreferrer">Analyst Program</a></li>
-        <li><a href="https://forms.gle/yfxsPRAuQdX2CteSA" target="_blank" rel="noopener noreferrer">Investment Team</a></li>
-        <li><a href="https://forms.gle/kXm4KZMKZagMknRF7" target="_blank" rel="noopener noreferrer">Consulting Team</a></li>
       </ul>
     </div>
   </div>
