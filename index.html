@@ -1160,14 +1160,6 @@ align-items: flex-end;
   .membership-price { font-size: 22px; font-weight: 500; color: var(--green-dark); margin-bottom: 4px; }
   .membership-price-note { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; }
 
-  /*.timeline-grid { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-  .timeline-item { display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--border); background: var(--white); }
-  .timeline-item:last-child { border-bottom: none; }
-  .timeline-date { padding: 24px 28px; background: var(--green-dark); color: var(--green-pale); font-size: 13px; font-weight: 500; display: flex; align-items: flex-start; padding-top: 28px; }
-  .timeline-body { padding: 24px 28px; }
-  .timeline-event { font-family: var(--font-display); font-size: 16px; font-weight: 500; margin-bottom: 6px; color: var(--text-dark); }
-  .timeline-detail { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
-
   /* ── BLOG ──
      Card styles for research publications and blog posts. */
   .blog-hero {
@@ -5139,6 +5131,7 @@ button[onclick="pubFlipbookNext()"]:hover {
           <button onclick="switchPortalTab('events')" class="portal-tab" id="ptab-events">Events</button>
           <button onclick="switchPortalTab('profile')" class="portal-tab" id="ptab-profile">Profile</button>
           <button onclick="switchPortalTab('recruiting')" class="portal-tab" id="ptab-recruiting">Recruiting</button>
+          <button onclick="switchPortalTab('mock')" class="portal-tab" id="ptab-mock">Mock Interview</button>
           <button onclick="switchPortalTab('board')" class="portal-tab" id="ptab-board">Board Hours</button>
           <button onclick="switchPortalTab('admin')" class="portal-tab" id="ptab-admin" style="display:none;">Admin</button>
         </div>
@@ -5412,9 +5405,7 @@ button[onclick="pubFlipbookNext()"]:hover {
             <button onclick="switchRecruitTab('resources')" class="admin-tab active" id="rtab-resources">Resources</button>
             <button onclick="switchRecruitTab('internships')" class="admin-tab" id="rtab-internships">Internships</button>
             <button onclick="switchRecruitTab('resume')" class="admin-tab" id="rtab-resume">Resume Book</button>
-            <button onclick="switchRecruitTab('mock')" class="admin-tab" id="rtab-mock">Mock Interview</button>
             <button onclick="switchRecruitTab('alumni')" class="admin-tab" id="rtab-alumni">Alumni</button>
-            <button onclick="switchRecruitTab('pitches')" class="admin-tab" id="rtab-pitches">Pitch Archive</button>
           </div>
           <div id="recruit-slot"></div>
         </div>
@@ -5546,6 +5537,17 @@ button[onclick="pubFlipbookNext()"]:hover {
             </div>
 
             <div class="ufa-card">
+              <div class="ufa-label">What year are you?</div>
+              <div id="mock-years" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;">
+                <button type="button" class="ufa-board-card" style="text-align:center;cursor:pointer;padding:12px;" data-year="freshman" onclick="pickMockYear('freshman')">Freshman</button>
+                <button type="button" class="ufa-board-card" style="text-align:center;cursor:pointer;padding:12px;" data-year="sophomore" onclick="pickMockYear('sophomore')">Sophomore</button>
+                <button type="button" class="ufa-board-card" style="text-align:center;cursor:pointer;padding:12px;" data-year="junior" onclick="pickMockYear('junior')">Junior</button>
+                <button type="button" class="ufa-board-card" style="text-align:center;cursor:pointer;padding:12px;" data-year="senior" onclick="pickMockYear('senior')">Senior</button>
+              </div>
+              <div class="ufa-note">This sets a sensible difficulty range for you below — change it any time with the Difficulty dropdown.</div>
+            </div>
+
+            <div class="ufa-card">
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;" id="mock-config-grid">
                 <div>
                   <div class="ufa-label">Questions this session</div>
@@ -5567,11 +5569,20 @@ button[onclick="pubFlipbookNext()"]:hover {
                   </select>
                 </div>
               </div>
+              <div style="margin-top:16px;">
+                <div class="ufa-label">Difficulty</div>
+                <select id="mock-level" class="ufa-select" onchange="onMockLevelChange()">
+                  <option value="auto" selected>Recommended for my year</option>
+                  <option value="easy">Easy only</option>
+                  <option value="easy_medium">Easy + Medium</option>
+                  <option value="all">All difficulties</option>
+                </select>
+              </div>
               <div style="margin-top:18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
                 <button class="ufa-btn" onclick="startMock()" id="mock-start-btn" disabled>Start session</button>
                 <label style="display:flex;align-items:center;gap:7px;font-size:13px;color:#3A4A3A;cursor:pointer;">
                   <input type="checkbox" id="mock-skip-seen" checked style="width:15px;height:15px;cursor:pointer;">
-                  Skip questions I've already had
+                  Skip questions I've got down, ask again the ones I flagged for review
                 </label>
               </div>
               <div id="mock-setup-note" class="ufa-note"></div>
@@ -5598,7 +5609,6 @@ button[onclick="pubFlipbookNext()"]:hover {
 
             <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;">
               <button class="ufa-btn-ghost" onclick="toggleMockFramework()" id="mock-reveal-btn">Show answer framework</button>
-              <button class="ufa-btn" onclick="nextMockQuestion()" id="mock-next-btn">Next question &rarr;</button>
             </div>
 
             <div class="ufa-card" id="mock-framework" style="display:none;background:#F7F9F7;">
@@ -5607,6 +5617,11 @@ button[onclick="pubFlipbookNext()"]:hover {
               <div class="ufa-note" style="margin-top:14px;font-style:italic;">
                 This is a skeleton, not a script. Interviewers can tell when an answer is memorized.
               </div>
+            </div>
+
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;">
+              <button class="ufa-btn-ghost" onclick="answerMockQuestion(false)" id="mock-review-btn">Flag for review — ask again</button>
+              <button class="ufa-btn" onclick="answerMockQuestion(true)" id="mock-gotit-btn">Got it, don't ask again &rarr;</button>
             </div>
           </div>
 
@@ -5700,70 +5715,6 @@ button[onclick="pubFlipbookNext()"]:hover {
                 <input type="file" id="al-csv" accept=".csv,text/csv" style="display:none;" onchange="handleAlumniCsv(this.files)">
                 <span style="font-size:12px;color:#6B7D6B;">CSV needs a name column; firm, role, grad year, email, LinkedIn, city and industry are matched if present.</span>
               </div>
-            </div>
-          </div>
-        </div>
-
-
-        <!-- ── STOCK PITCH ARCHIVE ──
-             Board-only until published. -->
-        <div id="ptab-content-pitches" style="display:none;">
-          <div class="ufa-pane-head">
-            <div class="ufa-pane-title">Pitch Archive</div>
-            <div class="ufa-pane-sub">Every stock pitch the investment team has made, with what actually happened afterward. Read a few before writing your own.</div>
-          </div>
-
-          <div id="pitches-visibility"></div>
-          <div id="pitch-alert" style="display:none;"></div>
-
-          <div class="ufa-card ufa-card-tight">
-            <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-              <input type="text" id="pi-search" class="ufa-input" placeholder="Search by ticker, company, or author" style="max-width:300px;" oninput="renderPitches()">
-              <select id="pi-direction" class="ufa-select" style="max-width:160px;" onchange="renderPitches()">
-                <option value="">Long and short</option>
-                <option value="long">Long only</option>
-                <option value="short">Short only</option>
-              </select>
-            </div>
-          </div>
-
-          <div id="pitch-list"></div>
-
-          <!-- Board only -->
-          <div id="pitch-admin" style="display:none;">
-            <div class="ufa-card">
-              <div class="ufa-label">Archive a pitch</div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;" id="pi-grid">
-                <div><div class="ufa-label">Ticker</div><input id="pi-ticker" class="ufa-input" placeholder="AAPL"></div>
-                <div><div class="ufa-label">Company</div><input id="pi-company" class="ufa-input" placeholder="Apple Inc."></div>
-                <div><div class="ufa-label">Direction</div>
-                  <select id="pi-dir-new" class="ufa-select"><option value="long">Long</option><option value="short">Short</option></select>
-                </div>
-                <div><div class="ufa-label">Date pitched</div><input type="date" id="pi-date" class="ufa-input"></div>
-                <div><div class="ufa-label">Author</div><input id="pi-author" class="ufa-input"></div>
-                <div><div class="ufa-label">Team</div><input id="pi-team" class="ufa-input" placeholder="Investment Team"></div>
-                <div><div class="ufa-label">Price when pitched</div><input type="number" step="0.01" id="pi-price" class="ufa-input" placeholder="182.50"></div>
-                <div><div class="ufa-label">Target price</div><input type="number" step="0.01" id="pi-target" class="ufa-input" placeholder="215.00"></div>
-              </div>
-              <div style="margin-top:14px;">
-                <div class="ufa-label">Thesis in a sentence or two</div>
-                <textarea id="pi-thesis" class="ufa-textarea" placeholder="What the market is missing, and why it corrects."></textarea>
-              </div>
-              <div style="margin-top:14px;">
-                <div class="ufa-label">What happened <span style="text-transform:none;letter-spacing:0;font-weight:400;">(fill in later)</span></div>
-                <input id="pi-outcome" class="ufa-input" placeholder="Up 22% over eight months; thesis played out on margins, not volume.">
-              </div>
-
-              <div id="pitch-dropzone" class="ufa-drop" style="margin-top:16px;padding:26px 20px;"
-                   onclick="document.getElementById('pitch-file').click()">
-                <div class="ufa-drop-icon">📊</div>
-                <div class="ufa-drop-title">Attach the deck or memo</div>
-                <div class="ufa-drop-sub">Optional &middot; PDF, PowerPoint, or Excel &middot; 25 MB max</div>
-              </div>
-              <input type="file" id="pitch-file" style="display:none;" onchange="handlePitchFile(this.files)">
-              <div class="ufa-note" id="pitch-file-label"></div>
-
-              <div style="margin-top:16px;"><button class="ufa-btn" onclick="addPitch()">Archive pitch</button></div>
             </div>
           </div>
         </div>
@@ -5897,7 +5848,7 @@ button[onclick="pubFlipbookNext()"]:hover {
                   <button onclick="postAnnouncement()" style="background:#3D6B3D;color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;padding:10px 24px;border-radius:4px;border:none;cursor:pointer;">Post</button>
                   <button onclick="clearAnnouncement()" style="background:#fff;border:1px solid rgba(46,74,46,0.2);color:#6B7D6B;font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 24px;border-radius:4px;cursor:pointer;">Clear banner</button>
                 </div>
-                <div id="announce-msg" style="display:none;margin-top:10px;font-size:13px;color:#2e6b2e;"></div>                <div id="announce-msg" style="display:none;margin-top:10px;font-size:13px;color:#2e6b2e;"></div>
+                <div id="announce-msg" style="display:none;margin-top:10px;font-size:13px;color:#2e6b2e;"></div>
                 <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(46,74,46,0.1);display:flex;gap:10px;flex-wrap:wrap;">
                   <button class="ufa-btn-ghost ufa-btn-sm" onclick="emailAnnouncementToAll()" id="announce-email-btn">Also email all members</button>
                   <button class="ufa-btn-ghost ufa-btn-sm" onclick="copyAllMemberEmails()">Copy emails for BCC</button>
@@ -7111,7 +7062,7 @@ const TYPE_COLORS = {
 
 // ── Tab switching ──
 async function switchPortalTab(tab) {
-  ['overview','leaderboard','events','profile','recruiting','board','admin'].forEach(t => {
+  ['overview','leaderboard','events','profile','recruiting','mock','board','admin'].forEach(t => {
     const btn = document.getElementById('ptab-' + t);
     const content = document.getElementById('ptab-content-' + t);
     if (btn) btn.classList.toggle('active', t === tab);
@@ -7119,6 +7070,7 @@ async function switchPortalTab(tab) {
   });
   if (tab === 'leaderboard') renderLeaderboard();
   if (tab === 'events') renderUpcoming();
+  if (tab === 'mock') loadMockTab();
   if (tab === 'profile') {
     if (currentUser && !currentMember) {
       const m = await fetchMember(currentUser.email);
@@ -8831,29 +8783,29 @@ ib: [
     f:'Same discipline as any flow-through. Pretax income down 40, tax saving 10, net income down 30. Cash flow: net income down 30, add back the 40 non-cash charge, cash up 10. Balance sheet: inventory down 40, cash up 10, assets down 30; retained earnings down 30.' },
   { id:'ib5', d:'medium', q:'Walk me through a DCF.',
     f:'Project unlevered free cash flow for five to ten years. Discount each year at WACC. Calculate terminal value by perpetuity growth or an exit multiple, and discount that too. Sum for enterprise value. Bridge to equity value by subtracting net debt. Divide by diluted shares for value per share. Add one honest sentence about how sensitive the whole thing is to terminal assumptions.' },
-  { id:'ib6', d:'medium', q:'What is the difference between enterprise value and equity value?',
+  { id:'ib6', d:'medium', q:'Walk me through the difference between enterprise value and equity value.',
     f:'Equity value is what shareholders own; enterprise value is what the whole operating business is worth regardless of who financed it. Bridge: equity value plus debt, minus cash, plus preferred and minority interest. The intuitive line to have ready: you subtract cash because when you buy the company you get its cash back, so it lowers your effective price.' },
   { id:'ib7', d:'medium', q:'Why do you subtract cash in the enterprise value bridge?',
     f:'Because acquiring the company hands you its cash, which offsets what you paid. The cleaner framing: enterprise value should reflect the operating business, and idle cash is not an operating asset.' },
-  { id:'ib8', d:'medium', q:'What is WACC and how do you calculate it?',
+  { id:'ib8', d:'medium', q:'Walk me through WACC — what it is and how you would actually calculate it for a company.',
     f:'The blended required return across the capital structure. Cost of equity weighted by equity share plus after-tax cost of debt weighted by debt share. Cost of equity usually via CAPM: risk-free rate plus beta times the equity risk premium. Note that debt is cheaper because it is senior and the interest is tax-deductible.' },
   { id:'ib9', d:'medium', q:'Why is debt cheaper than equity?',
     f:'Lenders sit ahead of equity holders in the capital structure, so their risk is lower and their required return is lower. On top of that, interest is tax-deductible, which lowers the after-tax cost further. Add the limit: past a point more debt raises the risk of distress and pushes both costs up.' },
   { id:'ib10', d:'hard', q:'Which is usually higher, the cost of equity or the cost of debt, and could that ever flip?',
     f:'Cost of equity is higher almost always, for seniority and tax reasons. It can compress in extreme cases — a deeply distressed borrower may face debt costs approaching or exceeding what equity demanded before the trouble started. Showing you know the rule and its edge is what earns credit.' },
-  { id:'ib11', d:'medium', q:'What are the three main valuation methodologies and how do they rank?',
+  { id:'ib11', d:'medium', q:'Walk me through the three main ways you would value a company, and how you would expect them to rank against each other.',
     f:'Comparable companies, precedent transactions, and DCF. Precedents usually come in highest because they include a control premium. DCF is the most theoretically sound and the most sensitive to assumptions. Comps show where the market is right now. Say what each is good for rather than just listing them.' },
   { id:'ib12', d:'medium', q:'When would a DCF not be the right tool?',
     f:'Financial institutions, where debt is an operating input rather than financing. Early-stage companies with no predictable cash flows. Deeply cyclical businesses at a random point in the cycle. Real option situations like biotech. Name the alternative you would reach for instead.' },
-  { id:'ib13', d:'medium', q:'What is terminal value and what are the two ways to calculate it?',
+  { id:'ib13', d:'medium', q:'Walk me through terminal value — what it is and the two ways you\'d calculate it.',
     f:'The value of all cash flows past the explicit forecast. Perpetuity growth method: final year cash flow times one plus growth, divided by WACC minus growth. Exit multiple method: apply a terminal multiple to final year EBITDA. Mention that terminal value often carries most of the total, which is why the assumption gets scrutinized.' },
-  { id:'ib14', d:'medium', q:'What is a reasonable terminal growth rate and why?',
+  { id:'ib14', d:'medium', q:'If you had to defend your terminal growth rate assumption to a skeptical MD, what number would you use and why?',
     f:'Typically two to three percent, roughly long-run inflation or GDP growth. The reasoning is the point: no company can outgrow the economy forever, so a higher number implies the firm eventually becomes the entire economy.' },
   { id:'ib15', d:'medium', q:'Why do we use unlevered free cash flow in a DCF?',
     f:'Unlevered cash flow is available to all capital providers, so discounting it at WACC gives enterprise value, independent of financing. It also makes companies with different capital structures comparable. Levered cash flow discounted at cost of equity would give equity value directly, which is a valid but less common approach.' },
   { id:'ib16', d:'medium', q:'Walk me through a merger model at a high level.',
     f:'Value each company standalone. Set the purchase price and the mix of cash, debt and stock. Combine the financials, layer in synergies, and adjust for new interest expense, foregone interest on cash used, and new shares issued. Compare combined pro forma EPS to the acquirer standalone EPS to see accretion or dilution.' },
-  { id:'ib17', d:'medium', q:'What makes a deal accretive or dilutive?',
+  { id:'ib17', d:'medium', q:'Say a banker tells you a deal is accretive — what actually determines that, and what would make the same deal dilutive instead?',
     f:'Compare what you earn against what you pay for it. Roughly, if the acquirer P/E is higher than the target effective P/E after the premium, the deal is accretive. Cash deals tend to be accretive when rates are low, stock deals when the acquirer trades at a rich multiple. State the rule and then say it is a screen, not a verdict on whether the deal is good.' },
   { id:'ib18', d:'hard', q:'A deal is accretive. Does that make it a good deal?',
     f:'No. Accretion is an accounting outcome that can be engineered with cheap debt or an overvalued stock. A good deal creates value: real synergies, strategic fit, a price below what the asset is worth. Cite the failure mode — a company can buy earnings while destroying value.' },
@@ -8861,21 +8813,21 @@ ib: [
     f:'A sponsor buys a company using mostly debt and a slice of equity. Model the sources and uses, project cash flows, use free cash flow to pay down debt, then exit in roughly five years at an assumed multiple. Returns come from three places: debt paydown, EBITDA growth, and multiple expansion. Compute IRR and money multiple on the sponsor equity.' },
   { id:'ib20', d:'medium', q:'What makes a good LBO candidate?',
     f:'Stable, predictable cash flows to service debt. Low existing leverage. Low capital intensity. A defensible market position. Non-core assets to sell. A clear path to exit. Say which one matters most and why: cash flow predictability, because everything else fails without it.' },
-  { id:'ib21', d:'medium', q:'What are the three drivers of returns in an LBO and which matters most?',
+  { id:'ib21', d:'medium', q:'Walk me through the three drivers of returns in an LBO, and tell me which one you\'d lean on most.',
     f:'Debt paydown, EBITDA growth, multiple expansion. Argue that EBITDA growth is the most durable, because multiple expansion depends on the market and debt paydown alone produces modest returns. Sponsors who underwrite to multiple expansion are betting on conditions they do not control.' },
   { id:'ib22', d:'medium', q:'Why might a company trade at a discount to its peers?',
     f:'Slower growth, weaker margins, customer concentration, governance concerns, a levered balance sheet, cyclicality, or a market that simply has not noticed. Split into deserved and undeserved reasons — that structure is what makes the answer sound like an investor.' },
-  { id:'ib23', d:'medium', q:'What is net working capital and what does an increase mean for cash?',
+  { id:'ib23', d:'medium', q:'Walk me through net working capital, and tell me what it means for a company\'s cash when that number increases.',
     f:'Current operating assets minus current operating liabilities. An increase consumes cash, because you are funding receivables and inventory before collecting. Growing companies often show strong profits and weak cash for exactly this reason.' },
   { id:'ib24', d:'medium', q:'A company has positive net income but negative operating cash flow. What is happening?',
     f:'Working capital is absorbing cash: receivables ballooning, inventory building, payables shrinking. Or earnings contain non-cash gains. Flag that this pattern is worth investigating — it is where aggressive revenue recognition tends to show up.' },
-  { id:'ib25', d:'medium', q:'What is goodwill and when is it created?',
+  { id:'ib25', d:'medium', q:'Say a client asks you point-blank what goodwill is and when it shows up on a balance sheet — how do you explain it?',
     f:'The excess of purchase price over the fair value of identifiable net assets in an acquisition. It sits on the balance sheet, is not amortized under US GAAP, and is tested for impairment. An impairment says the acquirer overpaid, which is why the write-offs make news.' },
   { id:'ib26', d:'medium', q:'Why would two companies in the same industry have very different margins?',
     f:'Scale, pricing power, product mix, vertical integration, cost structure, geography, where they sit in the value chain, or a different accounting treatment. Pick two and go deep rather than listing all eight.' },
   { id:'ib27', d:'hard', q:'How would you value a company with no revenue?',
     f:'Discount to a future state where it does have revenue, and probability-weight it. Look at comparable transactions for similar assets. Value per user, per subscriber, or per unit of whatever it accumulates. Sum-of-the-parts if pieces are separable. Say plainly that precision is impossible and the job is bounding a range.' },
-  { id:'ib28', d:'medium', q:'What is beta and what does levering it do?',
+  { id:'ib28', d:'medium', q:'Walk me through beta, and tell me what happens to it when you lever it up.',
     f:'Beta measures a stock volatility relative to the market. Comparable betas include each company own capital structure, so you unlever to get asset beta, then relever at your target structure. Higher leverage means higher equity beta, which means a higher cost of equity.' },
   { id:'ib29', d:'medium', q:'Walk me through what happens to the statements when a company issues one hundred dollars of stock.',
     f:'No income statement impact. Cash up 100 on the balance sheet, equity up 100. Cash flow statement: 100 inflow under financing. The point of the question is checking you do not treat raising money as earning money.' },
@@ -8883,43 +8835,43 @@ ib: [
     f:'It approximates operating cash generation before financing and tax choices, which makes companies comparable. It misses real capital intensity, working capital swings, and the fact that depreciation stands in for assets that genuinely wear out. Have the memorable version ready: EBITDA treats capex as if it were optional.' },
   { id:'ib31', d:'hard', q:'A company you cover just missed earnings badly and the stock went up. Explain.',
     f:'Expectations were already worse than the print. Guidance may have improved, a buyback or a divestiture may have been announced, or the bad news may have been already priced in. The underlying idea: stocks move on the delta from expectations, not on absolute results.' },
-  { id:'ib32', d:'medium', q:'What is the difference between a strategic buyer and a financial buyer?',
+  { id:'ib32', d:'medium', q:'Walk me through the difference between a strategic buyer and a financial buyer in an M and A process.',
     f:'A strategic buyer operates in or near the business and can realize synergies, so it can usually pay more. A financial sponsor buys for return on invested capital and is disciplined by its underwriting model. Note the consequence for a sale process: you run them differently.' },
   { id:'ib33', d:'medium', q:'Why might a company choose to do a stock deal rather than a cash deal?',
     f:'It lacks the cash or does not want the leverage, its own stock is richly valued, it wants to share the integration risk with target shareholders, or the tax treatment favors it. Add that offering stock can signal the acquirer thinks its own shares are expensive, which the market notices.' },
   { id:'ib34', d:'hard', q:'Tell me about a deal you have followed and what you thought of it.',
     f:'Name the parties, size and structure. State the strategic rationale in one sentence. Then give a view with a reason: the price, the synergy assumption, the regulatory risk, the fit. Close by naming what would tell you in two years whether it worked. Have one deal genuinely ready.' },
-  { id:'ib35', d:'medium', q:'What is the difference between an asset sale and a stock sale?',
+  { id:'ib35', d:'medium', q:'Walk me through the difference between an asset sale and a stock sale, and who tends to push for each.',
     f:'In an asset sale the buyer picks specific assets and liabilities and generally gets a stepped-up tax basis; buyers usually prefer it. In a stock sale the buyer takes the whole entity including unknown liabilities; sellers usually prefer it for cleaner exit and better tax treatment. Frame it as who bears what risk.' },
   { id:'ib36', d:'medium', q:'Walk me through the effect of a one hundred dollar increase in accounts receivable.',
     f:'No income statement impact. On the cash flow statement, an increase in a working capital asset is a use of cash, so cash falls 100. On the balance sheet, receivables up 100 and cash down 100, so assets are unchanged and it balances. The idea to land: you have recognized revenue but not collected, so growth in receivables quietly consumes cash.' },
   { id:'ib37', d:'medium', q:'Why can two companies with identical EBITDA have very different free cash flow?',
     f:'Different capital intensity, so different capex. Different working capital needs. Different interest burdens. Different cash tax rates. Different one-time items buried in the EBITDA adjustments. This is the practical case against treating EBITDA as cash flow, and having a concrete example ready makes the answer land.' },
-  { id:'ib38', d:'medium', q:'What is the difference between LIFO and FIFO and when does it matter?',
+  { id:'ib38', d:'medium', q:'Walk me through LIFO versus FIFO, and tell me when the choice between them actually matters.',
     f:'FIFO expenses the oldest inventory first, LIFO the newest. When prices are rising, LIFO shows higher cost of goods sold, lower profit, and lower taxes, while FIFO shows the reverse and a more current inventory value on the balance sheet. It matters most in inflationary periods and in commodity-linked businesses.' },
   { id:'ib39', d:'medium', q:'What happens to the three statements if a company writes off a bad receivable of fifty dollars?',
     f:'Income statement: a bad debt expense of 50 reduces pretax income; at a 25 percent tax rate net income falls 37.50. Cash flow: net income down 37.50, add back the 50 non-cash write-off, so cash rises 12.50 from the tax shield. Balance sheet: receivables down 50, cash up 12.50, retained earnings down 37.50.' },
   { id:'ib40', d:'hard', q:'When would you use a levered DCF instead of an unlevered one?',
     f:'When you want equity value directly, or when the capital structure is central to the business rather than incidental. Financial institutions are the standard case, because for a bank debt is raw material rather than financing. In a levered DCF you project free cash flow to equity and discount at cost of equity instead of WACC.' },
-  { id:'ib41', d:'medium', q:'What is the treasury stock method and why do we use it?',
+  { id:'ib41', d:'medium', q:'Walk me through the treasury stock method — what it is and why we bother with it.',
     f:'It calculates how many net new shares in-the-money options and warrants would add. Assume they are exercised at the strike, then assume the company uses those proceeds to buy back shares at the current market price. The difference is the net share increase. We use it to get a genuine diluted share count for equity value.' },
   { id:'ib42', d:'medium', q:'Two companies have the same revenue and growth but very different valuations. What explains it?',
     f:'Margins and the cash conversion behind them, capital intensity, durability and quality of the growth, competitive position, balance sheet risk, management credibility, sector multiple, and how much of the growth is already priced in. Structure the answer as quality of earnings versus quantity of earnings.' },
-  { id:'ib43', d:'medium', q:'What is working capital and what does negative working capital tell you?',
+  { id:'ib43', d:'medium', q:'Walk me through working capital, and tell me what it means if a company is running negative working capital.',
     f:'Current assets minus current liabilities. Negative working capital is not automatically bad — it often means the business collects from customers before paying suppliers, which is a funding advantage. Restaurants and subscription businesses commonly run negative. It becomes a warning sign only when it reflects a liquidity problem instead of a favorable cycle.' },
   { id:'ib44', d:'hard', q:'A company has a lot of cash. Should it buy back stock, pay a dividend, invest, or acquire something?',
     f:'It depends on the return available on each. Reinvest if there are projects earning above the cost of capital. Acquire if a target is genuinely worth more to you than its price. Buy back stock if the shares are undervalued, which is a real if — most buybacks happen at highs. Dividends signal maturity and are hard to cut. Rank them by return and by what the decision signals.' },
-  { id:'ib45', d:'medium', q:'What is the difference between operating leverage and financial leverage?',
+  { id:'ib45', d:'medium', q:'Walk me through the difference between operating leverage and financial leverage, and why a company with a lot of both should worry you in a downturn.',
     f:'Operating leverage is the share of costs that are fixed, so profits swing more than revenue does. Financial leverage is the use of debt, which amplifies returns to equity. High on both is a dangerous combination in a downturn: revenue falls, fixed costs stay, and interest still has to be paid.' },
   { id:'ib46', d:'medium', q:'How would you value a company with volatile earnings?',
     f:'Normalize across the cycle rather than valuing peak or trough as if permanent. Use mid-cycle margins, look at multi-year averages, run scenarios rather than a single case, and lean on asset value as a floor. Say explicitly that a single-year multiple is misleading for cyclicals, which is the insight being tested.' },
-  { id:'ib47', d:'medium', q:'What is a control premium and why does it exist?',
+  { id:'ib47', d:'medium', q:'Say a precedent transaction shows a big premium over the trading price — how would you explain to me why that premium exists?',
     f:'The amount above the trading price an acquirer pays to gain control. It exists because control lets you change management, redirect strategy, capture synergies, and access the cash flows directly. It is why precedent transactions usually imply higher multiples than trading comparables.' },
   { id:'ib48', d:'medium', q:'Explain the difference between a merger and an acquisition in practice.',
     f:'Technically a merger combines two companies into a new entity and an acquisition is one buying another. In practice almost everything is an acquisition, and merger of equals is often language chosen to make the transaction easier politically. The useful answer notes that who controls the board and names the CEO tells you which it really is.' },
   { id:'ib49', d:'hard', q:'What would make you walk away from a deal you had spent months on?',
     f:'Diligence invalidating the core thesis, quality of earnings findings that materially change the price, a liability you cannot bound, management proving unreliable, or a price that no longer clears your return threshold. Name sunk cost explicitly and say that months invested is not a reason to proceed.' },
-  { id:'ib50', d:'medium', q:'What is deferred revenue and where does it show up?',
+  { id:'ib50', d:'medium', q:'Walk me through deferred revenue — what it is, where it shows up, and what it tells you when it is growing.',
     f:'Cash collected for goods or services not yet delivered. It sits as a liability on the balance sheet and converts to revenue as you deliver. Growing deferred revenue is usually a healthy sign for a subscription business, because it means customers are paying ahead of consumption.' },
   { id:'ib51', d:'medium', q:'How do you calculate diluted shares outstanding?',
     f:'Start from basic shares, then add the net dilution from in-the-money options and warrants using the treasury stock method, plus shares from convertible securities where conversion is in the money. Out-of-the-money instruments are excluded. Getting a genuinely diluted count matters because it is the denominator of value per share.' },
@@ -8927,35 +8879,35 @@ ib: [
     f:'The market believes the assets are worth less than carried, or that the company will destroy value going forward by earning below its cost of capital. Common in banks in stress and in asset-heavy businesses in decline. It can signal a bargain or a warning — the resolution is whether the assets are genuinely worth book and whether returns can recover.' },
   { id:'ib53', d:'medium', q:'Why might a company with strong earnings still go bankrupt?',
     f:'Because bankruptcy is about liquidity, not profitability. Earnings can be non-cash or trapped in working capital; debt can come due all at once; a covenant can trip; a lender can refuse to refinance. The line worth having: companies do not go bankrupt from losses, they go bankrupt from running out of cash.' },
-  { id:'ib54', d:'medium', q:'What is the difference between cost of debt and the interest rate on the debt?',
+  { id:'ib54', d:'medium', q:'Walk me through the difference between a company\'s stated interest rate and its actual cost of debt for valuation purposes.',
     f:'The stated interest rate is what is paid; the cost of debt for valuation is the after-tax rate, since interest is deductible. It should also reflect what the company would pay to borrow today rather than what it locked in years ago. Using an old coupon on a company whose credit has deteriorated understates the true cost.' },
   { id:'ib55', d:'medium', q:'Walk me through what happens when a company pays a one hundred dollar dividend.',
     f:'No income statement impact — dividends are not an expense. Cash flow statement: 100 outflow under financing. Balance sheet: cash down 100 and retained earnings down 100, so it balances. The point being tested is that returning capital is not the same as incurring a cost.' },
   { id:'ib56', d:'hard', q:'How would you think about valuing a company being acquired for its technology rather than its cash flow?',
     f:'Standard cash flow methods will underprice it. Look at what building the capability internally would cost and how long it would take, what the technology is worth inside the acquirer rather than standalone, comparable technology transactions, and value per engineer or per patent as a sanity check. Say plainly that the value is strategic and specific to this buyer.' },
-  { id:'ib57', d:'medium', q:'What is EBIT versus EBITDA and when would you prefer each?',
+  { id:'ib57', d:'medium', q:'Walk me through EBIT versus EBITDA, and tell me when you\'d reach for one over the other.',
     f:'EBIT is after depreciation and amortization, EBITDA is before. Prefer EBITDA when comparing companies with different D and A policies or asset ages. Prefer EBIT when capital intensity is central to the business, because it at least partly accounts for the assets being consumed. Cable and telecom are the classic cases where EBITDA flatters.' },
-  { id:'ib58', d:'medium', q:'What is a sensitivity analysis and why does every DCF have one?',
+  { id:'ib58', d:'medium', q:'Say you hand me a DCF with no sensitivity table on it — what am I missing, and why does every DCF need one?',
     f:'It shows how the output changes across a range of the most uncertain inputs, usually WACC and terminal growth or exit multiple, presented as a grid. Every DCF has one because the point estimate is false precision — the honest output is a range, and the grid shows how much of the answer is assumption rather than analysis.' },
   { id:'ib59', d:'hard', q:'A client wants to sell. How would you advise them on timing?',
     f:'Where they sit in their own operating cycle, sector multiples right now versus history, the financing environment for buyers, who the natural buyers are and whether they are active, and whether a year of improvement would raise the price more than it risks. Add that the best time to sell is usually when you do not have to.' },
-  { id:'ib60', d:'medium', q:'What are synergies and why should you be skeptical of them?',
+  { id:'ib60', d:'medium', q:'An acquirer tells you the deal makes sense because of the synergies — walk me through what those actually are, and why you\'d want to poke holes in that number.',
     f:'Cost synergies come from eliminating duplicate functions and buying power; revenue synergies from cross-selling and distribution. Be skeptical because cost synergies are usually achievable and often overstated in timing, while revenue synergies rarely materialize as modeled. Note also that the target usually captures much of the value through the premium.' },
-  { id:'ib61', d:'medium', q:'What is the equity risk premium and roughly what is it?',
+  { id:'ib61', d:'medium', q:'Walk me through the equity risk premium — what it is conceptually, and what number you would actually plug into a DCF.',
     f:'The extra return investors demand for holding equities over a risk-free asset. Commonly estimated in the range of four to six percent, depending on method and period. What matters in the answer is knowing it is an estimate with real disagreement behind it, not a constant you look up.' },
   { id:'ib62', d:'medium', q:'How does a share buyback affect the financial statements and EPS?',
     f:'No income statement impact directly. Cash down and treasury stock up on the balance sheet, reducing equity. Cash flow: outflow under financing. EPS rises because the share count falls, though net income also falls slightly from the lost interest on the cash used. Add that higher EPS from a buyback is not the same as value creation.' },
   { id:'ib63', d:'hard', q:'Why might a strategic buyer pay more than a financial sponsor for the same company?',
     f:'The strategic can realize synergies a sponsor cannot, has a longer holding period, may face a lower cost of capital, and may be defending against a competitor acquiring it. Sponsors are disciplined by a return model with a defined exit. The exception is when a sponsor already owns a platform in the sector and can act like a strategic.' },
-  { id:'ib64', d:'medium', q:'What does a negative enterprise value mean?',
+  { id:'ib64', d:'medium', q:'Say you pull up a company and its enterprise value comes back negative — what does that actually mean?',
     f:'Cash exceeds market capitalization plus debt, so the market values the operating business at less than nothing. It happens in deep distress, in companies burning cash where the market expects the balance to be destroyed, and occasionally in genuine mispricings. Worth investigating rather than assuming a free lunch.' },
   { id:'ib65', d:'medium', q:'Explain accretion and dilution in one minute.',
     f:'Compare the acquirer standalone EPS to combined pro forma EPS after the deal, including new interest, foregone interest on cash used, and new shares issued. Higher is accretive, lower is dilutive. The shortcut: accretive when the acquirer P/E exceeds the target effective P/E after the premium. Close by saying it is a screen, not a judgment on deal quality.' },
-  { id:'ib66', d:'medium', q:'What is the difference between gross, operating and net margin, and what does each tell you?',
+  { id:'ib66', d:'medium', q:'Walk me through gross, operating, and net margin, and tell me what each one is actually telling you about a business.',
     f:'Gross margin is pricing power and direct cost efficiency. Operating margin adds overhead and shows how well the whole operation converts revenue to profit. Net margin includes financing and tax, so it reflects choices unrelated to operations. Comparing the three across peers tells you where a company is winning or losing.' },
   { id:'ib67', d:'hard', q:'Is a company with no debt being run well?',
     f:'Not necessarily. Zero debt may mean a conservative balance sheet in a volatile business, which is prudent, or it may mean management is leaving cheap capital on the table and accepting a higher cost of capital than necessary. The answer depends on cash flow stability and reinvestment opportunities. Argue a position rather than sitting on the fence.' },
-  { id:'ib68', d:'medium', q:'What is capex maintenance versus growth capex?',
+  { id:'ib68', d:'medium', q:'Walk me through the difference between maintenance capex and growth capex, and why that split matters for free cash flow.',
     f:'Maintenance capex keeps the existing asset base running at current capacity; growth capex expands it. The distinction matters because free cash flow available to owners should be measured after maintenance capex but before growth capex, since growth is discretionary. Companies rarely disclose the split, so it usually has to be estimated.' },
   { id:'ib69', d:'medium', q:'Why do banks get valued differently from other companies?',
     f:'Debt is an operating input for a bank rather than financing, so enterprise value and EBITDA are meaningless. Instead you use price to book and price to tangible book, return on equity, and a dividend discount or excess returns model. Regulatory capital requirements also constrain growth in a way they do not for an industrial.' },
@@ -8989,7 +8941,7 @@ consulting: [
     f:'Estimate elasticity: how much volume you lose per point of price. Compare margin gained against volume lost. Consider competitor response, customer segments that react differently, and brand positioning. Suggest testing in a limited market before rolling out.' },
   { id:'co12', d:'medium', q:'A manufacturer wants to cut costs by fifteen percent. Where do you look?',
     f:'Get the cost breakdown first. Then work biggest to smallest: procurement and supplier terms, labor productivity, footprint and utilization, waste and yield, overhead. Flag which cuts are reversible and which damage capability permanently. Name what you would protect.' },
-  { id:'co13', d:'medium', q:'What is the difference between a symptom and a root cause?',
+  { id:'co13', d:'medium', q:'A client tells you sales are down and calls that the problem — how would you explain to them the difference between a symptom and a root cause?',
     f:'A symptom is what the client noticed; the root cause is why it happened. Falling sales is a symptom. Losing your best salespeople to a competitor is closer to a cause. Give a concrete example, and note that clients usually hire you having already diagnosed the symptom.' },
   { id:'co14', d:'hard', q:'The data says one thing and the client executives all believe another. What do you do?',
     f:'Check your data and your method first. Then understand why they believe what they believe — they often know something the data does not capture. Present the finding without making anyone wrong, show your work, and let the evidence carry it. Being right and ignored is a failure.' },
@@ -9045,7 +8997,7 @@ consulting: [
     f:'Buildings in Manhattan, split by height band, elevators per building by band, then sum. Or work from floor area and rules of thumb about elevators per square foot. Announce assumptions, do round arithmetic, sanity check the total. As always the number is not the point.' },
   { id:'co40', d:'hard', q:'A client wants to double revenue in three years. Is that realistic and how would you find out?',
     f:'Decompose the required growth rate and compare it to the market growth rate, their historical growth, and what competitors have achieved. Then map where the growth could come from: existing customers, new customers, new products, new geographies, acquisition. Size each. If the pieces do not add to double, say so and offer what is achievable.' },
-  { id:'co41', d:'medium', q:'What is the difference between market share and share of wallet?',
+  { id:'co41', d:'medium', q:'Walk me through the difference between market share and share of wallet, and why that distinction actually changes a growth strategy.',
     f:'Market share is your slice of total category sales. Share of wallet is your slice of an individual customer spending in the category. You can have low market share and high share of wallet with a small loyal base, which implies a very different growth strategy than the reverse.' },
   { id:'co42', d:'medium', q:'A retailer online sales are growing but total sales are flat. What is happening?',
     f:'Channel shift rather than growth — online is cannibalizing stores. Check whether total customers and total units are growing, whether the same customers moved channels, and what the margin difference is between channels. Online often carries lower margins after shipping and returns, so flat sales can mean falling profit.' },
@@ -9059,7 +9011,7 @@ consulting: [
     f:'School-age population in Texas, share of families who use tutoring, sessions per year, price per session. Segment by test prep versus subject help if it helps. State assumptions, do round math, sanity check against the number of tutors implied by the total.' },
   { id:'co47', d:'hard', q:'A nonprofit wants to increase impact with a flat budget. How do you approach it?',
     f:'Define impact in measurable terms first, since that is usually the hard part. Then look at cost per unit of impact across programs and reallocate toward the most efficient. Consider partnerships to avoid duplicating capability, and cutting programs that are beloved but ineffective. The political difficulty of the last one is real and worth naming.' },
-  { id:'co48', d:'medium', q:'What is a fighter brand and when does it make sense?',
+  { id:'co48', d:'medium', q:'Walk me through what a fighter brand is and when a company would actually want to launch one.',
     f:'A lower-priced brand launched to compete against a discount entrant without cutting price on your flagship. It makes sense when you have a premium brand worth protecting and a price-sensitive segment you are losing. The risks are cannibalization and confusing your own positioning, so it needs clear separation.' },
   { id:'co49', d:'medium', q:'A software company churn is fine overall but terrible in one segment. What do you do?',
     f:'Find out whether that segment was ever a good fit — wrong-fit customers churning is not always a problem to fix. If they are strategically important, diagnose whether it is onboarding, product gaps, pricing, or a competitor. Then decide deliberately whether to fix, reprice, or stop selling to that segment.' },
@@ -9073,7 +9025,7 @@ consulting: [
     f:'Segment customers by price sensitivity rather than treating them as one group. Estimate elasticity from past price moves or a test. Model margin gained against volume lost at several price points. Consider raising prices only on less sensitive segments or products, and pairing the increase with a visible improvement. Recommend a test market first.' },
   { id:'co54', d:'hard', q:'How would you turn around a business losing money in every segment?',
     f:'Stabilize cash first — that buys the time to do anything else. Then find whether any segment is viable at a smaller size, cut the ones that are structurally unprofitable, and reduce overhead to fit the surviving business. In parallel, diagnose whether the problem is cost, price, or demand, because the fix differs entirely. Be honest if the answer is an orderly wind-down.' },
-  { id:'co55', d:'medium', q:'What is the difference between a cost that is fixed and one that is sunk?',
+  { id:'co55', d:'medium', q:'Walk me through the difference between a fixed cost and a sunk cost, and why confusing the two leads to bad decisions.',
     f:'A fixed cost does not vary with volume but is still ongoing and can be changed over time. A sunk cost is already spent and cannot be recovered, so it should never influence a forward-looking decision. The classic error is keeping a failing project alive because of what has already been spent on it.' },
   { id:'co56', d:'medium', q:'A company wants to expand into a country it knows nothing about. First three things you check?',
     f:'Market size and growth, and whether the product needs changing for local preferences. Competitive and regulatory landscape, including whether foreign ownership is restricted. Route to market — distribution, partners, and what it costs to reach customers. Then whether the company has the management capacity to run it, which is what usually breaks these.' },
@@ -9083,7 +9035,7 @@ consulting: [
     f:'Check your work first, hard. Then raise it early and privately with your team lead and the client sponsor rather than saving it for the final presentation. Present the evidence and the method rather than the conclusion alone, and give them room to reach it themselves. Being right at the last minute in front of the board is how relationships end.' },
   { id:'co59', d:'medium', q:'How would you improve a restaurant profitability without raising prices?',
     f:'Increase table turns, reduce food waste and portion variance, renegotiate supply, shift the menu toward higher-margin dishes and steer customers to them, add high-margin categories like drinks, adjust staffing to match traffic patterns, and grow off-peak demand. Order them by effort against impact.' },
-  { id:'co60', d:'medium', q:'What is customer lifetime value and how would you use it?',
+  { id:'co60', d:'medium', q:'Say a client asks you to explain customer lifetime value and how they should actually use it — walk me through it.',
     f:'The total profit expected from a customer over the relationship: margin per period times expected tenure, discounted. Use it to decide how much you can spend to acquire a customer, which segments deserve investment, and whether a retention program pays for itself. The common mistake is using revenue rather than margin.' },
   { id:'co61', d:'hard', q:'A family business is passing to the next generation. What should they worry about?',
     f:'Governance and decision rights, whether the successor is capable and whether anyone will say so honestly, key employee retention through the transition, liquidity for family members who want out, tax and structure, and whether the strategy that worked for thirty years still works. The people problems here are harder than the financial ones.' },
@@ -9121,15 +9073,15 @@ hf: [
     f:'Conviction, liquidity, correlation with what you already own, and downside if you are wrong. Size to the downside rather than the upside. Mention that concentration expresses conviction but only if you have actually done the work to earn it.' },
   { id:'hf6', d:'hard', q:'A position is down thirty percent. Walk me through what you do.',
     f:'Re-underwrite from scratch and ask whether you would buy it today at this price knowing what you now know. Separate price action from thesis damage. Add, hold or exit based on that, not on the loss. Say explicitly that the entry price is irrelevant to the decision.' },
-  { id:'hf7', d:'medium', q:'What is your investment process?',
+  { id:'hf7', d:'medium', q:'Walk me through your investment process end to end.',
     f:'How you generate ideas, how you screen and prioritize, what diligence you actually do, how you decide to size, and how you monitor and exit. Have a real answer that reflects what you have actually done, even if the scale is small.' },
   { id:'hf8', d:'medium', q:'How do you value a business?',
     f:'Start from what the business earns in cash and what those earnings are worth given growth, durability and reinvestment needs. Use DCF for structure, multiples for market context, and asset value for a floor. Say which one you weight for this kind of business and why.' },
   { id:'hf9', d:'medium', q:'What makes a business high quality?',
     f:'Returns on capital above cost of capital, sustained. A moat that explains why: switching costs, network effects, scale, brand, or regulation. Reinvestment runway. Management that allocates well. Give an example and name the specific source of the moat.' },
-  { id:'hf10', d:'hard', q:'What is a company you think is overvalued and why?',
+  { id:'hf10', d:'hard', q:'Give me a company you think is overvalued right now and walk me through why.',
     f:'Be specific about the gap between price and value and where the market expectation is unrealistic. Reverse-engineer what growth or margin the current price implies and argue it is unachievable. That framing is far stronger than saying the multiple is high.' },
-  { id:'hf11', d:'medium', q:'What is the biggest risk in the market right now?',
+  { id:'hf11', d:'medium', q:'Tell me the single biggest risk in the market right now, and walk me through why.',
     f:'Pick one and defend it: concentration, credit, policy, valuation, or something structural. Say what would confirm or dispel it, and what you would do about it. A specific defended view beats a survey of everything that could go wrong.' },
   { id:'hf12', d:'medium', q:'How do you generate ideas?',
     f:'Screens, spin-offs and special situations, reading filings, following industries you understand, competitors of companies you own, forced-seller situations. Explain the funnel: how many ideas in, how many survive, what kills most of them.' },
@@ -9143,15 +9095,15 @@ hf: [
     f:'Be honest and specific. One or two things you actually read consistently, plus how you go deeper on an idea. Naming five publications you do not read is transparent and worse than naming one you do.' },
   { id:'hf17', d:'hard', q:'How would you know if you were just lucky?',
     f:'Sample size, attribution to your stated thesis rather than a general market move, and whether the reason it worked is the reason you predicted. Good investors track whether they were right for the right reason. This question rewards intellectual honesty above all.' },
-  { id:'hf18', d:'medium', q:'What is a catalyst and why does it matter?',
+  { id:'hf18', d:'medium', q:'Walk me through what a catalyst is and why it actually matters to a position.',
     f:'A specific event that forces the market to re-price: earnings, a spin-off, a regulatory decision, a capital allocation change, an activist. It matters because being right with no catalyst can mean waiting years, and a fund pays for capital in the meantime.' },
   { id:'hf19', d:'medium', q:'How do you evaluate management?',
     f:'Capital allocation history, incentive structure and ownership, candor in bad quarters, and whether past promises matched later results. Read old letters and transcripts against what actually happened. That test is more informative than any meeting.' },
-  { id:'hf20', d:'hard', q:'What is something you believe about investing that most people disagree with?',
+  { id:'hf20', d:'hard', q:'Give me something you believe about investing that most people would disagree with.',
     f:'Any defensible contrarian view with reasoning. It could be about diversification, about holding periods, about whether moats are as durable as claimed. What is being tested is whether you have thought independently at all.' },
   { id:'hf21', d:'medium', q:'Value or growth, and is that distinction useful?',
     f:'The strongest answer questions the framing: growth is an input to value, not an alternative to it. Then say where you actually hunt and why. Confidence in rejecting a false dichotomy plays well.' },
-  { id:'hf22', d:'medium', q:'What is your view on where rates go and what it means for equities?',
+  { id:'hf22', d:'medium', q:'Walk me through your view on where rates go from here, and what that means for equities.',
     f:'Have a directional view with reasoning about inflation, growth and policy. Then the transmission: discount rates, the relative hit to long-duration assets, and the effect on leveraged balance sheets. Hold it loosely and say what would change your mind.' },
   { id:'hf23', d:'medium', q:'How much of a business do you need to understand before investing?',
     f:'Enough to know what drives the outcome and what would break the thesis. Perfect understanding is impossible and waiting for it means never investing. Name the specific variables you would insist on understanding for a given business.' },
@@ -9159,7 +9111,7 @@ hf: [
     f:'Time horizon arbitrage, doing primary work others will not, understanding a niche deeply, behavioral discipline in dislocations, and structural situations where sellers are forced. Informational edge is mostly gone; analytical and behavioral edge is not.' },
   { id:'hf25', d:'medium', q:'How do you think about cyclicals?',
     f:'Normalize earnings across the cycle rather than valuing peak or trough as if permanent. The classic trap: cyclicals look cheapest at the top and most expensive at the bottom. Say where you think we are and how confident you are.' },
-  { id:'hf26', d:'medium', q:'What is a value trap and how do you avoid one?',
+  { id:'hf26', d:'medium', q:'Walk me through what a value trap is and how you would avoid falling into one.',
     f:'A cheap stock that stays cheap because the business is eroding. Avoid by asking what stops the decline. Require a catalyst or an asset floor. Distinguish cheap from mispriced explicitly.' },
   { id:'hf27', d:'medium', q:'Tell me about a sector you know well.',
     f:'Pick something real. Cover how the businesses make money, what drives margins, who has power in the chain, and what is changing. Depth in one sector beats shallow coverage of many.' },
@@ -9173,11 +9125,11 @@ hf: [
     f:'Adjusted EBITDA, non-GAAP earnings, or anything with management discretion in the adjustment. Explain the specific manipulation it permits and what you look at instead.' },
   { id:'hf32', d:'hard', q:'Why do you want to work at a hedge fund rather than in banking?',
     f:'You want to be judged on being right rather than on execution. You want ownership of a view. Be honest about the tradeoffs you are accepting: narrower training, less structure, real accountability for losses.' },
-  { id:'hf33', d:'medium', q:'What is a company you have followed for a long time and what have you learned from watching it?',
+  { id:'hf33', d:'medium', q:'Give me a company you have followed for a long time — what have you learned just from watching it?',
     f:'Demonstrates sustained attention rather than a rehearsed pitch. Talk about how your view evolved and what surprised you. Being wrong about it at some point makes the answer stronger.' },
   { id:'hf34', d:'medium', q:'How do you think about the difference between a good company and a good investment?',
     f:'A good company at the wrong price is a bad investment; a mediocre company at a sufficiently low price can be a good one. Price is the bridge between the two. Give an example of each.' },
-  { id:'hf35', d:'hard', q:'What is on your watchlist right now and why is it not a position?',
+  { id:'hf35', d:'hard', q:'Walk me through what is on your watchlist right now, and tell me why it is not a position yet.',
     f:'Real names with a real reason for waiting: price, a pending catalyst, an unresolved question in the diligence. Shows a process rather than a portfolio, and that you can hold a view without acting on it.' }
 ],
 
@@ -9193,7 +9145,7 @@ pe: [
     f:'Revenue: pricing, salesforce productivity, new channels, add-on acquisitions. Cost: procurement, footprint rationalization, overhead, automation. Mix: shift toward higher-margin lines. Pick two you would do first and say why they come first.' },
   { id:'pe5', d:'medium', q:'What IRR do sponsors typically target and why?',
     f:'Roughly twenty to twenty-five percent gross, reflecting the illiquidity, leverage risk and fee structure limited partners are compensating for. Note the relationship to money multiple and hold period: about a 2.5x over five years lands near that IRR.' },
-  { id:'pe6', d:'medium', q:'What is the difference between IRR and money multiple, and can they disagree?',
+  { id:'pe6', d:'medium', q:'Walk me through the difference between IRR and money multiple, and tell me when the two can actually disagree.',
     f:'IRR is time-weighted, multiple is not. A fast small gain can post a great IRR and a poor multiple; a long hold can do the reverse. Sponsors care about both, and early distributions flatter IRR specifically.' },
   { id:'pe7', d:'hard', q:'Pitch me a company you would take private.',
     f:'Name it and why it fits: cash generation, underleveraged balance sheet, an underperforming segment, or a public market that misprices it. Then your value creation plan, rough leverage, and the exit. Be specific about what you would do in the first hundred days.' },
@@ -9201,15 +9153,15 @@ pe: [
     f:'Enough that returns work, not so much that a downturn breaks covenants. Depends on cash flow stability and cyclicality — stable businesses support more. Talk in turns of EBITDA and mention what happens in a stress case.' },
   { id:'pe9', d:'medium', q:'Walk me through the diligence you would run.',
     f:'Commercial: market, competition, customer concentration and retention. Financial: quality of earnings, working capital, normalization of EBITDA. Operational: management, systems, capex needs. Legal and regulatory. Name what most often kills a deal — quality of earnings surprises.' },
-  { id:'pe10', d:'medium', q:'What is a quality of earnings analysis?',
+  { id:'pe10', d:'medium', q:'Walk me through a quality of earnings analysis — what it actually is and what you are looking for.',
     f:'Testing whether reported EBITDA is real and repeatable: stripping out one-time items, correcting for aggressive recognition, adding back genuinely non-recurring costs, and adjusting for run-rate changes. Where buyers most often discover they were about to overpay.' },
   { id:'pe11', d:'hard', q:'A target has high customer concentration. Does that kill the deal?',
     f:'Not automatically. Investigate contract length, switching costs, relationship depth, and history of retention. Then price the risk: lower multiple, seller note, or an earnout. Structure can solve what diligence cannot resolve.' },
   { id:'pe12', d:'medium', q:'How do sponsors exit?',
     f:'Strategic sale, secondary sale to another sponsor, IPO, or a dividend recapitalization as a partial exit. Each has different pricing and certainty. Sponsors underwrite an exit path at entry; note which is usually most valuable and why.' },
-  { id:'pe13', d:'medium', q:'What is a dividend recap and when is it used?',
+  { id:'pe13', d:'medium', q:'Walk me through what a dividend recap is and when a sponsor would actually use one.',
     f:'The company raises new debt to pay a dividend to the sponsor, returning capital without selling. Used when returns are achieved but market conditions favor holding. Raises leverage and risk, and it does not fix an underlying business problem.' },
-  { id:'pe14', d:'medium', q:'What is a rollup, and when does it work?',
+  { id:'pe14', d:'medium', q:'Walk me through what a rollup is and when it actually works.',
     f:'Acquiring many small players in a fragmented market to capture scale and multiple arbitrage — small companies trade cheaper than the combined platform. Works when integration is genuinely achievable. Fails when the acquirer buys revenue without building an operating platform.' },
   { id:'pe15', d:'hard', q:'What kills more deals, price or something else?',
     f:'Price gets blamed; diligence findings and integration risk do more killing. Quality of earnings issues, customer concentration, management gaps, or an unresolvable liability. Give an example of each type.' },
@@ -9223,13 +9175,13 @@ pe: [
     f:'Paying up is only justified when the growth or margin plan genuinely supports it, because entry multiple sets the bar for exit. Overpaying transfers all return responsibility to operational improvement, which is the hardest lever.' },
   { id:'pe20', d:'medium', q:'Why do LBOs use so much debt?',
     f:'It amplifies equity returns when the business performs, interest is tax-deductible, and it imposes discipline on cash use. The cost is fragility — the same leverage amplifies downside and removes room for error.' },
-  { id:'pe21', d:'medium', q:'What is a management rollover and why does it matter?',
+  { id:'pe21', d:'medium', q:'Walk me through what a management rollover is and why it actually matters to a sponsor.',
     f:'Management reinvests a portion of their proceeds into the new equity, aligning them with the sponsor. It signals their own confidence. A management team that wants a full cash exit is telling you something.' },
   { id:'pe22', d:'hard', q:'Would you rather buy a good business at a fair price or a fair business at a good price?',
     f:'In PE the answer usually leans toward the good business, because you hold for years and quality compounds while cheap can stay broken. But argue it, and note where the cheap fair business wins: a clear operational fix and a short path to exit.' },
   { id:'pe23', d:'medium', q:'How do you evaluate a management team you would inherit?',
     f:'Track record against their own plan, depth beyond the CEO, willingness to be measured, and whether they have run a business at the next size up. Decide early whether you are backing them or replacing them.' },
-  { id:'pe24', d:'medium', q:'What is add-on acquisition strategy?',
+  { id:'pe24', d:'medium', q:'Walk me through an add-on acquisition strategy and why sponsors use it.',
     f:'Buying smaller companies onto a platform to grow EBITDA and blend down the effective purchase multiple. Works when integration and systems are real. Discuss the risk of buying complexity you cannot digest.' },
   { id:'pe25', d:'hard', q:'Talk me through a deal in the news and whether you would have done it.',
     f:'Parties, size, structure and rationale. Then a view: was the price defensible, is the leverage sustainable, is the value creation plan credible. Say what you would need to believe to underwrite it. Have one ready.' },
@@ -9237,11 +9189,11 @@ pe: [
     f:'Pick two and defend them on fundamentals — recurring revenue, fragmentation, non-cyclicality, or a structural tailwind. Then name what is unattractive and why, which is the harder half.' },
   { id:'pe27', d:'medium', q:'How does a sponsor create value beyond financial engineering?',
     f:'Operational improvement, professionalizing systems and reporting, add-ons, pricing discipline, talent upgrades, and strategic repositioning. Give a concrete mechanism rather than the category name.' },
-  { id:'pe28', d:'medium', q:'What is the J-curve?',
+  { id:'pe28', d:'medium', q:'Walk me through the J-curve and why it explains early fund returns.',
     f:'Fund returns dip early because of fees and costs before investments mature, then rise as exits come. It explains why judging a young fund on early marks is misleading.' },
   { id:'pe29', d:'hard', q:'How would you underwrite a business in a cyclical industry?',
     f:'Normalize earnings across the cycle, stress test at a trough, size leverage to survive that trough rather than the base case, and be explicit about where in the cycle you are entering. Note that entering at the peak with peak multiples is the classic error.' },
-  { id:'pe30', d:'medium', q:'What is the difference between growth equity and buyout?',
+  { id:'pe30', d:'medium', q:'Walk me through the difference between growth equity and buyout.',
     f:'Growth equity takes minority stakes in growing companies with little or no leverage, betting on expansion. Buyout takes control with leverage and drives returns through both operations and structure. Different risk, different control, different skill.' },
   { id:'pe31', d:'medium', q:'How do you get comfortable with an exit assumption five years out?',
     f:'Anchor to long-run trading ranges rather than today multiple, assume exit at or below entry as a discipline, and identify who the natural buyers would be. If the only exit is a richer market, the underwriting is weak.' },
@@ -9251,7 +9203,7 @@ pe: [
     f:'When diligence invalidates the thesis, when the price required exceeds what the model supports, or when management proves unreliable. Sunk cost is the trap — say plainly that months spent is not a reason to proceed.' },
   { id:'pe34', d:'medium', q:'Why private equity and why now, for you?',
     f:'What you want to learn, what you have done that points here, and what you find interesting about ownership rather than advising. Specific and personal beats polished and generic.' },
-  { id:'pe35', d:'medium', q:'What is the most important number in an LBO model?',
+  { id:'pe35', d:'medium', q:'Tell me the single most important number in an LBO model, and why you would pick it.',
     f:'Defend a pick. Entry multiple, because it sets everything downstream. Or EBITDA growth, because it is the durable lever. Or the exit multiple, because of its leverage on IRR. The defense matters more than the choice.' }
 ],
 
@@ -9405,9 +9357,7 @@ const RECRUIT_PANES = {
   resources:   'ptab-content-resources',
   internships: 'ptab-content-internships',
   resume:      'ptab-content-resume',
-  mock:        'ptab-content-mock',
-  alumni:      'ptab-content-alumni',
-  pitches:     'ptab-content-pitches'
+  alumni:      'ptab-content-alumni'
 };
 
 function groupRecruitingTabs() {
@@ -9432,21 +9382,17 @@ function switchRecruitTab(tab) {
   });
   if (tab === 'resources')   loadResources();
   if (tab === 'resume')      loadResumeTab();
-  if (tab === 'mock')        loadMockTab();
   if (tab === 'alumni')      loadAlumni();
-  if (tab === 'pitches')     loadPitches();
 }
 
 /**
- * Alumni and Pitches are board-only until published. Hiding the buttons
+ * Alumni is board-only until published. Hiding the button
  * is cosmetic — RLS is what actually protects the data — but leaving a
  * tab that returns nothing for members is just confusing.
  */
 const GATED_RECRUIT_TABS = [
   ['resume',  'visibility_resume'],
-  ['mock',    'visibility_mock'],
-  ['alumni',  'visibility_alumni'],
-  ['pitches', 'visibility_pitches']
+  ['alumni',  'visibility_alumni']
 ];
 
 async function applyRecruitVisibility() {
@@ -9463,14 +9409,18 @@ async function applyRecruitVisibility() {
 }
 
 /**
- * Hides the top-level Board Hours tab from members until it is published.
- * Called once when the dashboard opens.
+ * Hides top-level tabs that are still gated (Board Hours, Mock Interview)
+ * from members until they're published. Called once when the dashboard opens.
  */
 async function applyFeatureVisibility() {
   if (ufaIsBoard()) return;
   var cur = await ufaGetSetting('visibility_board_hours');
   var btn = document.getElementById('ptab-board');
   if (btn) btn.style.display = (cur && cur.members) ? '' : 'none';
+
+  var curMock = await ufaGetSetting('visibility_mock');
+  var mockBtn = document.getElementById('ptab-mock');
+  if (mockBtn) mockBtn.style.display = (curMock && curMock.members) ? '' : 'none';
 }
 
 
@@ -9493,6 +9443,14 @@ function ufaEsc(s) {
   return String(s == null ? '' : s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+/** Title-cases a display name ("john smith" / "JOHN SMITH" -> "John Smith")
+    without mangling apostrophes or hyphens ("mary-jane o'brien" -> "Mary-Jane O'Brien"). */
+function ufaTitleCase(s) {
+  return String(s == null ? '' : s).toLowerCase().replace(/[a-z]+/g, function (w) {
+    return w.charAt(0).toUpperCase() + w.slice(1);
+  });
 }
 
 /** Renders a dismissible message into a container, or hides it when msg is falsy. */
@@ -9765,7 +9723,23 @@ async function renderMyResume() {
       '</div>' +
       '<span class="ufa-pill ufa-pill-green">On file</span>' +
       '<button class="ufa-btn-ghost ufa-btn-sm" onclick="viewMyResume()">View</button>' +
+      '<button class="ufa-btn-ghost ufa-btn-sm" onclick="deleteMyResume()">Remove</button>' +
     '</div>';
+}
+
+async function deleteMyResume() {
+  if (!myResume) return;
+  if (!confirm('Remove your resume? You will need to upload a new one before the book goes out.')) return;
+  try {
+    await sb.storage.from('resumes').remove([myResume.file_path]);
+    var res = await sb.from('resume_submissions').delete().eq('email', ufaEmail());
+    if (res.error) throw res.error;
+    myResume = null;
+    ufaAlert('resume-alert', 'ok', 'Resume removed.');
+    await renderMyResume();
+  } catch (e) {
+    ufaAlert('resume-alert', 'err', 'Could not remove that file. Try again.');
+  }
 }
 
 async function viewMyResume() {
@@ -10049,7 +10023,7 @@ function renderResumeAdmin() {
   var html = '<thead><tr><th>Member</th><th>Role</th><th>Grad</th><th>Status</th><th>File</th><th></th></tr></thead><tbody>';
   rows.forEach(function (r) {
     html += '<tr>' +
-      '<td><div style="font-weight:600;color:#1C2B1C;">' + ufaEsc(r.name) + '</div>' +
+      '<td><div style="font-weight:600;color:#1C2B1C;">' + ufaEsc(ufaTitleCase(r.name)) + '</div>' +
         '<div style="font-size:12px;color:#6B7D6B;">' + ufaEsc(r.email) + '</div></td>' +
       '<td>' + ufaEsc(r.role) + '</td>' +
       '<td>' + ufaEsc(r.grad_year) + '</td>' +
@@ -11523,10 +11497,10 @@ async function openCandidate(id) {
       '<div class="ufa-label" style="margin-top:24px;">Interviewer chat</div>' +
       '<div class="ufa-pane-sub" style="margin-bottom:10px;">Visible to board members only. Updates live.</div>' +
       '<div class="ufa-chat">' +
-        '<div class="ufa-chat-log" id="iv-chat-log"><div class="ufa-empty">Loading…</div></div>' +
+        '<div class="ufa-chat-log" id="iv-chat-log-modal"><div class="ufa-empty">Loading…</div></div>' +
         '<div class="ufa-chat-input">' +
-          '<input id="iv-chat-text" class="ufa-input" placeholder="Message the other interviewers…" onkeydown="if(event.key===\'Enter\')sendChat(\'' + c.id + '\')">' +
-          '<button class="ufa-btn" onclick="sendChat(\'' + c.id + '\')">Send</button>' +
+          '<input id="iv-chat-text-modal" class="ufa-input" placeholder="Message the other interviewers…" onkeydown="if(event.key===\'Enter\')sendChat(\'' + c.id + '\',\'modal\')">' +
+          '<button class="ufa-btn" onclick="sendChat(\'' + c.id + '\',\'modal\')">Send</button>' +
         '</div>' +
       '</div>' +
     '</div>' +
@@ -11539,8 +11513,8 @@ async function openCandidate(id) {
     true
   );
 
-  await loadChat(c.id);
-  subscribeChat(c.id);
+  await loadChat(c.id, 'modal');
+  subscribeChat(c.id, 'modal');
 }
 
 function closeCandidateModal() {
@@ -11563,8 +11537,8 @@ async function setDecision(id, d) {
 
 /* ── Chat ────────────────────────────────────────────────────────── */
 
-async function loadChat(candId) {
-  var log = document.getElementById('iv-chat-log');
+async function loadChat(candId, ctx) {
+  var log = document.getElementById(ctx ? 'iv-chat-log-' + ctx : 'iv-chat-log');
   if (!log) return;
   var r = await sb.from('interview_chat').select('*')
     .eq('candidate_id', candId).order('created_at', { ascending: true }).limit(200);
@@ -11585,8 +11559,8 @@ function renderChatMsg(m) {
   '</div>';
 }
 
-async function sendChat(candId) {
-  var input = document.getElementById('iv-chat-text');
+async function sendChat(candId, ctx) {
+  var input = document.getElementById(ctx ? 'iv-chat-text-' + ctx : 'iv-chat-text');
   var text = (input.value || '').trim();
   if (!text) return;
   input.value = '';
@@ -11600,17 +11574,17 @@ async function sendChat(candId) {
   if (res.error) { input.value = text; ufaAlert('iv-alert', 'err', 'Message did not send.'); return; }
   // The realtime subscription echoes it back; refresh as a fallback in
   // case realtime is not enabled on the project.
-  setTimeout(function () { loadChat(candId); }, 250);
+  setTimeout(function () { loadChat(candId, ctx); }, 250);
 }
 
-function subscribeChat(candId) {
+function subscribeChat(candId, ctx) {
   unsubscribeChat();
   try {
     IV.chatSub = sb.channel('iv-chat-' + candId)
       .on('postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'interview_chat', filter: 'candidate_id=eq.' + candId },
         function (payload) {
-          var log = document.getElementById('iv-chat-log');
+          var log = document.getElementById(ctx ? 'iv-chat-log-' + ctx : 'iv-chat-log');
           if (!log) return;
           if (log.querySelector('.ufa-empty')) log.innerHTML = '';
           log.insertAdjacentHTML('beforeend', renderChatMsg(payload.new));
@@ -12520,6 +12494,8 @@ async function wipeCycle() {
 
 var MOCK = {
   track: null,
+  year: null,
+  level: 'auto',
   queue: [],
   idx: 0,
   perQ: 90,
@@ -12528,8 +12504,87 @@ var MOCK = {
   paused: false,
   startedAt: 0,
   progress: {},
-  sessionSeen: []
+  sessionSeen: [],
+  sessionMastered: [],
+  sessionReview: []
 };
+
+/* Maps a class year to the difficulty tiers it unlocks by default. Junior
+   and senior share the sophomore/full range since there is no separate
+   upperclassman question bank yet (see project notes) — the year picker
+   still records which year the member is, it just doesn't have a harder
+   bank to route them to yet. The Difficulty dropdown always lets a member
+   override this manually in either direction. */
+function mockYearLevels(year) {
+  if (year === 'freshman') return ['easy'];
+  if (year === 'sophomore') return ['easy', 'medium'];
+  return ['easy', 'medium', 'hard']; // junior, senior
+}
+
+function mockLevelLevels(level, year) {
+  if (level === 'easy') return ['easy'];
+  if (level === 'easy_medium') return ['easy', 'medium'];
+  if (level === 'all') return ['easy', 'medium', 'hard'];
+  return mockYearLevels(year); // 'auto'
+}
+
+function pickMockYear(year) {
+  MOCK.year = year;
+  Array.prototype.forEach.call(document.querySelectorAll('#mock-years [data-year]'), function (el) {
+    var on = el.dataset.year === year;
+    el.style.borderColor = on ? '#3D6B3D' : 'rgba(46,74,46,0.12)';
+    el.style.background = on ? '#F3F8F3' : '#fff';
+    el.style.boxShadow = on ? '0 0 0 2px rgba(61,107,61,0.15)' : 'none';
+  });
+  updateMockStartReadiness();
+}
+
+function onMockLevelChange() {
+  MOCK.level = document.getElementById('mock-level').value;
+  updateMockStartReadiness();
+}
+
+/* Both a track and a year are required before starting — the year is what
+   sets the difficulty range, so starting without it would silently fall
+   back to "everything," which defeats the point of asking. */
+function updateMockStartReadiness() {
+  var btn = document.getElementById('mock-start-btn');
+  if (btn) btn.disabled = !(MOCK.track && MOCK.year);
+  updateMockSetupNote();
+}
+
+/* Difficulty tiers currently in effect: an explicit Difficulty dropdown
+   choice wins, otherwise it falls back to whatever the chosen year unlocks. */
+function mockActiveLevels() {
+  return mockLevelLevels(MOCK.level, MOCK.year);
+}
+
+function updateMockSetupNote() {
+  var note = document.getElementById('mock-setup-note');
+  if (!note) return;
+  if (!MOCK.track || !MOCK.year) {
+    note.textContent = 'Pick a track and your year to see how many questions are in play.';
+    return;
+  }
+  var t = MOCK_TRACKS.filter(function (x) { return x.id === MOCK.track; })[0];
+  var levels = {};
+  mockActiveLevels().forEach(function (d) { levels[d] = true; });
+  var pool = MOCK_BANK[MOCK.track].filter(function (q) { return levels[q.d]; });
+  var p = MOCK.progress[MOCK.track] || {};
+  var mastered = {}; (p.mastered_ids || []).forEach(function (id) { mastered[id] = true; });
+  var review = {}; (p.review_ids || []).forEach(function (id) { review[id] = true; });
+  var reviewCount = pool.filter(function (q) { return review[q.id]; }).length;
+  var freshCount = pool.filter(function (q) { return !mastered[q.id] && !review[q.id]; }).length;
+
+  if (!pool.length) {
+    note.textContent = 'No ' + t.label + ' questions at this difficulty yet — try widening the Difficulty dropdown.';
+    return;
+  }
+  var bits = [pool.length + ' ' + t.label + ' question' + (pool.length === 1 ? '' : 's') + ' at this difficulty'];
+  if (reviewCount) bits.push(reviewCount + ' flagged for review');
+  if (!freshCount && !reviewCount) bits.push('you have gotten all of these — uncheck the box above to run them again');
+  note.textContent = bits.join(', ') + '.';
+}
 
 async function loadMockTab() {
   if (ufaIsBoard()) await renderVisibilityToggle('mock', 'visibility_mock');
@@ -12577,31 +12632,17 @@ function pickMockTrack(id) {
     el.style.background = on ? '#F3F8F3' : '#fff';
     el.style.boxShadow = on ? '0 0 0 2px rgba(61,107,61,0.15)' : 'none';
   });
-  var btn = document.getElementById('mock-start-btn');
-  if (btn) btn.disabled = false;
-
-  var t = MOCK_TRACKS.filter(function (x) { return x.id === id; })[0];
-  var seen = (MOCK.progress[id] && MOCK.progress[id].seen_ids) ? MOCK.progress[id].seen_ids.length : 0;
-  var total = MOCK_BANK[id].length;
-  var note = document.getElementById('mock-setup-note');
-  if (note) {
-    note.textContent = seen >= total
-      ? 'You have been through all ' + total + ' ' + t.label + ' questions. Uncheck the box above to run them again.'
-      : (total - seen) + ' of ' + total + ' ' + t.label + ' questions are still new to you.';
-  }
+  updateMockStartReadiness();
 }
 
 function startMock() {
-  if (!MOCK.track) return;
-  var bank = MOCK_BANK[MOCK.track];
+  if (!MOCK.track || !MOCK.year) return;
+  var levels = {};
+  mockActiveLevels().forEach(function (d) { levels[d] = true; });
+  var bank = MOCK_BANK[MOCK.track].filter(function (q) { return levels[q.d]; });
   var count = Number(document.getElementById('mock-count').value);
   var skipSeen = document.getElementById('mock-skip-seen').checked;
   MOCK.perQ = Number(document.getElementById('mock-seconds').value);
-
-  var seen = {};
-  if (skipSeen && MOCK.progress[MOCK.track]) {
-    (MOCK.progress[MOCK.track].seen_ids || []).forEach(function (id) { seen[id] = true; });
-  }
 
   var shuffle = function (arr) {
     var a = arr.slice();
@@ -12612,11 +12653,30 @@ function startMock() {
     return a;
   };
 
-  var fresh = shuffle(bank.filter(function (q) { return !seen[q.id]; }));
-  var rest = shuffle(bank.filter(function (q) { return seen[q.id]; }));
-  MOCK.queue = fresh.concat(rest).slice(0, count);
+  var queue;
+  if (skipSeen) {
+    // "Skip seen" now means something more useful than plain repeat-avoidance:
+    // never show a question already marked "got it", always surface anything
+    // flagged "review again" first, then fill with whatever is still fresh,
+    // then anything else already seen but never judged either way.
+    var p = MOCK.progress[MOCK.track] || {};
+    var mastered = {}; (p.mastered_ids || []).forEach(function (id) { mastered[id] = true; });
+    var review = {}; (p.review_ids || []).forEach(function (id) { review[id] = true; });
+    var seen = {}; (p.seen_ids || []).forEach(function (id) { seen[id] = true; });
+
+    var notMastered = bank.filter(function (q) { return !mastered[q.id]; });
+    var needsReview = shuffle(notMastered.filter(function (q) { return review[q.id]; }));
+    var fresh = shuffle(notMastered.filter(function (q) { return !review[q.id] && !seen[q.id]; }));
+    var otherSeen = shuffle(notMastered.filter(function (q) { return !review[q.id] && seen[q.id]; }));
+    queue = needsReview.concat(fresh, otherSeen);
+  } else {
+    queue = shuffle(bank);
+  }
+  MOCK.queue = queue.slice(0, count);
   MOCK.idx = 0;
   MOCK.sessionSeen = [];
+  MOCK.sessionMastered = [];
+  MOCK.sessionReview = [];
   MOCK.startedAt = Date.now();
   MOCK.paused = false;
 
@@ -12642,8 +12702,9 @@ function showMockQuestion() {
   document.getElementById('mock-framework').style.display = 'none';
   document.getElementById('mock-framework-text').textContent = q.f;
   document.getElementById('mock-reveal-btn').textContent = 'Show answer framework';
-  document.getElementById('mock-next-btn').textContent =
-    (MOCK.idx >= MOCK.queue.length - 1) ? 'Finish session' : 'Next question →';
+  var isLast = MOCK.idx >= MOCK.queue.length - 1;
+  document.getElementById('mock-gotit-btn').textContent = isLast ? 'Got it — finish session' : 'Got it, don\'t ask again →';
+  document.getElementById('mock-review-btn').textContent = isLast ? 'Flag for review — finish session' : 'Flag for review — ask again';
 
   if (MOCK.handle) clearInterval(MOCK.handle);
   var timerEl = document.getElementById('mock-timer');
@@ -12667,6 +12728,24 @@ function nextMockQuestion() {
   if (MOCK.idx >= MOCK.queue.length - 1) { endMock(false); return; }
   MOCK.idx++;
   showMockQuestion();
+}
+
+/* Records the member's own verdict on the current question — "got it" means
+   don't surface it again next time "skip seen" is checked; "flag for
+   review" means surface it again ahead of everything else. Either way,
+   advance to the next question (or finish, on the last one). */
+function answerMockQuestion(gotIt) {
+  var q = MOCK.queue[MOCK.idx];
+  if (q) {
+    if (gotIt) {
+      MOCK.sessionMastered.push(q.id);
+      MOCK.sessionReview = MOCK.sessionReview.filter(function (id) { return id !== q.id; });
+    } else {
+      MOCK.sessionReview.push(q.id);
+      MOCK.sessionMastered = MOCK.sessionMastered.filter(function (id) { return id !== q.id; });
+    }
+  }
+  nextMockQuestion();
 }
 
 function toggleMockPause() {
@@ -12695,16 +12774,28 @@ async function endMock(early) {
     answered + ' question' + (answered === 1 ? '' : 's') + ' in ' +
     Math.max(1, Math.round(secs / 60)) + ' minutes.';
 
-  // Merge this session's questions into the member's seen list.
-  var prev = MOCK.progress[MOCK.track] || { seen_ids: [], sessions: 0, total_sec: 0 };
+  // Merge this session's questions into the member's seen list, plus
+  // this session's "got it" / "flag for review" verdicts. A question can
+  // only carry one verdict at a time, so a fresh verdict this session
+  // overrides whatever it was marked as before.
+  var prev = MOCK.progress[MOCK.track] || { seen_ids: [], mastered_ids: [], review_ids: [], sessions: 0, total_sec: 0 };
   var merged = {};
   (prev.seen_ids || []).forEach(function (id) { merged[id] = true; });
   MOCK.sessionSeen.slice(0, answered).forEach(function (id) { merged[id] = true; });
+
+  var mastered = {};
+  (prev.mastered_ids || []).forEach(function (id) { mastered[id] = true; });
+  var review = {};
+  (prev.review_ids || []).forEach(function (id) { review[id] = true; });
+  MOCK.sessionMastered.forEach(function (id) { mastered[id] = true; delete review[id]; });
+  MOCK.sessionReview.forEach(function (id) { review[id] = true; delete mastered[id]; });
 
   var row = {
     email: ufaEmail(),
     industry: MOCK.track,
     seen_ids: Object.keys(merged),
+    mastered_ids: Object.keys(mastered),
+    review_ids: Object.keys(review),
     sessions: (prev.sessions || 0) + 1,
     total_sec: (prev.total_sec || 0) + secs,
     last_used: new Date().toISOString()
@@ -12750,13 +12841,15 @@ function renderMockStats() {
   box.innerHTML = rows.map(function (t) {
     var p = MOCK.progress[t.id];
     var seen = (p.seen_ids || []).length;
+    var reviewCount = (p.review_ids || []).length;
     var total = MOCK_BANK[t.id].length;
     return '<div class="ufa-avail-row">' +
       '<div style="flex:1;min-width:150px;">' +
         '<div style="font-size:13px;font-weight:600;color:#1C2B1C;">' + t.label + '</div>' +
         '<div style="font-size:12px;color:#6B7D6B;margin-top:2px;">' +
           p.sessions + ' session' + (p.sessions === 1 ? '' : 's') + ' · ' +
-          Math.round((p.total_sec || 0) / 60) + ' minutes practiced</div>' +
+          Math.round((p.total_sec || 0) / 60) + ' minutes practiced' +
+          (reviewCount ? ' · ' + reviewCount + ' flagged for review' : '') + '</div>' +
       '</div>' +
       '<div style="display:flex;align-items:center;gap:10px;min-width:150px;">' +
         '<div class="ufa-rank-bar" style="flex:1;"><div class="ufa-rank-fill" style="width:' +
@@ -12770,14 +12863,14 @@ function renderMockStats() {
 
 /* ══════════════════════════════════════════════════════════════════════
    PORTAL v2 — PART C
-   Alumni Directory · Stock Pitch Archive
+   Alumni Directory
 
-   All three follow the same pattern: one pane that members read, with the
-   board's add and edit controls appearing inline for board accounts. That
-   beats a separate admin screen — you manage the thing while looking at
-   it, and there is one layout to keep consistent instead of two.
+   One pane that members read, with the board's add and edit controls
+   appearing inline for board accounts. That beats a separate admin
+   screen — you manage the thing while looking at it, and there is one
+   layout to keep consistent instead of two.
 
-   Alumni and Pitches ship hidden. The board fills them in, then flips a
+   Alumni ships hidden. The board fills it in, then flips a
    visibility switch. That switch is enforced by RLS in the database, not
    just here, so an unpublished directory is genuinely unreadable rather
    than merely unlinked.
@@ -12934,146 +13027,6 @@ function handleAlumniCsv(files) {
 
 
 /* ══════════════════════════════════════════════════════════════════
-   3. STOCK PITCH ARCHIVE
-   ══════════════════════════════════════════════════════════════════ */
-
-var pitchRows = [];
-
-async function loadPitches() {
-  var box = document.getElementById('pitch-list');
-  if (box) box.innerHTML = '<div class="ufa-empty">Loading…</div>';
-  var r = await sb.from('pitches').select('*').order('pitched_on', { ascending: false });
-  pitchRows = r.data || [];
-
-  var admin = document.getElementById('pitch-admin');
-  if (admin) admin.style.display = ufaIsBoard() ? '' : 'none';
-  if (ufaIsBoard()) await renderVisibilityToggle('pitches', 'visibility_pitches');
-  ufaWireDrop('pitch-dropzone', handlePitchFile);
-  renderPitches();
-}
-
-function renderPitches() {
-  var box = document.getElementById('pitch-list');
-  if (!box) return;
-  var q = ((document.getElementById('pi-search') || {}).value || '').trim().toLowerCase();
-  var dir = (document.getElementById('pi-direction') || {}).value || '';
-
-  var rows = pitchRows.filter(function (p) {
-    if (dir && p.direction !== dir) return false;
-    if (!q) return true;
-    return [p.ticker, p.company, p.author_name, p.thesis].join(' ').toLowerCase().indexOf(q) !== -1;
-  });
-
-  if (!rows.length) {
-    box.innerHTML = '<div class="ufa-empty">' +
-      (pitchRows.length ? 'Nothing matches that search.' :
-        'No pitches archived yet.' + (ufaIsBoard() ? ' Add the first one below.' : '')) + '</div>';
-    return;
-  }
-
-  box.innerHTML = rows.map(function (p) {
-    return '<div class="ufa-card ufa-card-tight" style="margin-bottom:12px;">' +
-      '<div style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:flex-start;">' +
-        '<div style="flex:1;min-width:220px;">' +
-          '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">' +
-            '<span style="font-family:\'Playfair Display\',Georgia,serif;font-size:19px;color:#1C2B1C;font-weight:600;">' +
-              ufaEsc(p.ticker) + '</span>' +
-            '<span class="ufa-pill ufa-pill-' + (p.direction === 'short' ? 'red' : 'green') + '">' +
-              (p.direction === 'short' ? 'Short' : 'Long') + '</span>' +
-          '</div>' +
-          '<div style="font-size:13px;color:#3A4A3A;margin-top:3px;">' + ufaEsc(p.company || '') + '</div>' +
-          (p.thesis ? '<div style="font-size:13px;color:#4A5A4A;line-height:1.65;margin-top:10px;">' + ufaEsc(p.thesis) + '</div>' : '') +
-          '<div style="font-size:12px;color:#6B7D6B;margin-top:10px;">' +
-            ufaEsc([p.author_name, p.team, p.pitched_on ? ufaDate(p.pitched_on) : ''].filter(Boolean).join(' · ')) +
-          '</div>' +
-          (p.outcome ? '<div style="font-size:12px;color:#3A4A5A;background:#F1F5F9;border-radius:5px;padding:8px 10px;margin-top:10px;line-height:1.55;">' +
-            'What happened: ' + ufaEsc(p.outcome) + '</div>' : '') +
-        '</div>' +
-        '<div style="text-align:right;min-width:130px;">' +
-          (p.target_price != null ? '<div style="font-size:12px;color:#6B7D6B;">Target</div>' +
-            '<div style="font-size:17px;font-weight:600;color:#1C2B1C;">$' + Number(p.target_price).toFixed(2) + '</div>' : '') +
-          (p.price_then != null ? '<div style="font-size:12px;color:#6B7D6B;margin-top:6px;">Pitched at $' +
-            Number(p.price_then).toFixed(2) + '</div>' : '') +
-          '<div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;">' +
-            (p.file_path ? '<button class="ufa-btn-ghost ufa-btn-sm" onclick="openPitchFile(\'' + ufaEsc(p.file_path) + '\')">Open deck</button>' : '') +
-            (ufaIsBoard() ? '<button class="ufa-btn-ghost ufa-btn-sm ufa-btn-danger" onclick="deletePitch(\'' + p.id + '\')">Remove</button>' : '') +
-          '</div>' +
-        '</div>' +
-      '</div>' +
-    '</div>';
-  }).join('');
-}
-
-var pendingPitchFile = null;
-
-function handlePitchFile(files) {
-  if (!files || !files.length) return;
-  var f = files[0];
-  if (f.size > 25 * 1024 * 1024) {
-    ufaAlert('pitch-alert', 'err', 'That file is ' + ufaBytes(f.size) + '. The limit is 25 MB.');
-    return;
-  }
-  pendingPitchFile = f;
-  var el = document.getElementById('pitch-file-label');
-  if (el) el.textContent = f.name + ' (' + ufaBytes(f.size) + ') — ready to attach';
-}
-
-async function addPitch() {
-  var ticker = (document.getElementById('pi-ticker').value || '').trim().toUpperCase();
-  if (!ticker) { ufaAlert('pitch-alert', 'err', 'A ticker is required.'); return; }
-
-  var row = {
-    ticker: ticker,
-    company: (document.getElementById('pi-company').value || '').trim() || null,
-    direction: document.getElementById('pi-dir-new').value,
-    thesis: (document.getElementById('pi-thesis').value || '').trim() || null,
-    author_name: (document.getElementById('pi-author').value || '').trim() || null,
-    team: (document.getElementById('pi-team').value || '').trim() || null,
-    pitched_on: document.getElementById('pi-date').value || null,
-    target_price: parseFloat(document.getElementById('pi-target').value) || null,
-    price_then: parseFloat(document.getElementById('pi-price').value) || null,
-    outcome: (document.getElementById('pi-outcome').value || '').trim() || null
-  };
-
-  if (pendingPitchFile) {
-    var safe = ticker.replace(/[^A-Z0-9]/g, '') + '_' + Date.now() + '_' +
-      pendingPitchFile.name.replace(/[^A-Za-z0-9._-]/g, '_');
-    var up = await sb.storage.from('pitches').upload(safe, pendingPitchFile, { upsert: false });
-    if (up.error) { ufaAlert('pitch-alert', 'err', 'File upload failed: ' + up.error.message); return; }
-    row.file_path = safe;
-    row.file_name = pendingPitchFile.name;
-  }
-
-  var res = await sb.from('pitches').insert(row);
-  if (res.error) { ufaAlert('pitch-alert', 'err', 'Could not save: ' + res.error.message); return; }
-
-  ['pi-ticker', 'pi-company', 'pi-thesis', 'pi-author', 'pi-team', 'pi-date',
-   'pi-target', 'pi-price', 'pi-outcome'].forEach(function (id) {
-    var el = document.getElementById(id); if (el) el.value = '';
-  });
-  pendingPitchFile = null;
-  var lbl = document.getElementById('pitch-file-label');
-  if (lbl) lbl.textContent = '';
-  await loadPitches();
-  ufaAlert('pitch-alert', 'ok', 'Archived ' + ticker + '.');
-}
-
-async function openPitchFile(path) {
-  var r = await sb.storage.from('pitches').createSignedUrl(path, 300);
-  if (r.error || !r.data) { ufaAlert('pitch-alert', 'err', 'Could not open that file.'); return; }
-  window.open(r.data.signedUrl, '_blank', 'noopener');
-}
-
-async function deletePitch(id) {
-  if (!window.confirm('Remove this pitch from the archive?')) return;
-  var row = pitchRows.filter(function (p) { return p.id === id; })[0];
-  if (row && row.file_path) { try { await sb.storage.from('pitches').remove([row.file_path]); } catch (e) {} }
-  await sb.from('pitches').delete().eq('id', id);
-  await loadPitches();
-}
-
-
-/* ══════════════════════════════════════════════════════════════════
    SHARED: publish / unpublish a feature to members
    ══════════════════════════════════════════════════════════════════ */
 
@@ -13082,7 +13035,7 @@ async function deletePitch(id) {
    behind it is a member's own practice history, so a database policy would
    be theatre. Saying so plainly beats implying protection that is not there. */
 const DB_ENFORCED_FEATURES = [
-  'visibility_alumni', 'visibility_pitches',
+  'visibility_alumni',
   'visibility_board_hours', 'visibility_resume'
 ];
 
@@ -14173,8 +14126,28 @@ setTimeout(() => {
 <!-- Publications flipbook libraries: PDF.js renders each PDF page to an
      image; StPageFlip displays two pages side by side with a page-turn
      animation. See initPubFlipbook() below. -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+<script>
+  // pdf.js and page-flip together are a heavy download and are only used by
+  // the Publications flipbook, so they are no longer loaded up front for
+  // every visitor — they're fetched here, on demand, the first time
+  // initPubFlipbook() runs (see the showPage() hook below).
+  let _pubFlipbookDepsPromise = null;
+  function loadPubFlipbookDeps() {
+    if (_pubFlipbookDepsPromise) return _pubFlipbookDepsPromise;
+    function loadScript(src) {
+      return new Promise(function (resolve, reject) {
+        const s = document.createElement('script');
+        s.src = src;
+        s.onload = resolve;
+        s.onerror = function () { reject(new Error('Failed to load ' + src)); };
+        document.head.appendChild(s);
+      });
+    }
+    _pubFlipbookDepsPromise = loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js')
+      .then(function () { return loadScript('https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js'); });
+    return _pubFlipbookDepsPromise;
+  }
+</script>
 <script>
   /* ════════════════════════════════════════════════════════════════
      PUBLICATIONS — INTERACTIVE FLIPBOOK VIEWER
@@ -14211,6 +14184,8 @@ setTimeout(() => {
     if (!bookEl) return;
 
     try {
+      if (loadingEl) loadingEl.textContent = 'Loading viewer…';
+      await loadPubFlipbookDeps();
       pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
       const pdf = await pdfjsLib.getDocument(PUB_PDF_URL).promise;
